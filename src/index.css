@@ -1,0 +1,46 @@
+:root{
+  --color-primary-100: #dee3ea;
+  --color-primary-200: #b2bdcd;
+  --color-primary-300: #5d7290;
+  --color-primary-600: #323d4d;
+  --color-primary-700: #242c37;
+  --color-primary-800: #151a21;
+  --color-primary-900: #0b0e11;
+  --color-secondary: #5575e7;
+  --color-red: #fd4d4d;
+  --color-red-hover: #fd6868;
+  --color-red-disabled: #f5bfbf;
+}
+
+*{
+  padding: 0;
+  margin: 0;
+}
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+  background-color: var(--color-primary-900);
+}
+input:focus{
+  outline: 1px solid var(--color-primary-300);
+}
+
+::-webkit-scrollbar{
+  width: 7px;
+  /* display: none; */
+}
+::-webkit-scrollbar-track{
+  background: var(--color-primary-800);
+}
+::-webkit-scrollbar-thumb{
+  background: var(--color-primary-600);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover{
+  background: var(--color-primary-700);
+}
