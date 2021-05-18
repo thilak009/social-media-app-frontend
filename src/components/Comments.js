@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getComments } from '../user'
-
+import '../CSS/post.css'
 
 function Comments({postId}) {
 
@@ -18,14 +18,15 @@ function Comments({postId}) {
             setComments(data)
             setShow(true)
         })
+        .catch(err=>console.log(err))
     },[])
 
     return (
         <div className="comments-container">
             {   show && (
-                comments.map((comment,index)=>{
+                comments.map((comment)=>{
                     return(
-                        <div key={index} className="comment-info">
+                        <div key={comment._id} className="comment-info">
                             <h4>{comment.userId.username}</h4>
                             <p>{comment.comment}</p>
                         </div>

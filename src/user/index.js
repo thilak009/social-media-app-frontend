@@ -1,28 +1,45 @@
 import { isAuthenticated } from "../auth";
 
-export const editProfile = (formData)=>{
-
-    const {user,token} = isAuthenticated();
-    return fetch(`${process.env.REACT_APP_BASE_URL}/user/profile/${user._id}/edit-profile`,{
-        method:"PUT",
-        headers:{
-            "auth-token":token,
-            //"Content-Type":"multipart/form-data"
-        },
-        body: formData
-    })
-    .then(response=>{
-        return response.json()
-    })
-    .catch(err=>console.log(err))
-
-}
 
 export const getAllPosts=()=>{
     
     const {user,token} = isAuthenticated()
 
     return fetch(`${process.env.REACT_APP_BASE_URL}/user/${user._id}/`,{
+        method:"GET",
+        headers:{
+            "auth-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(res=>{
+        return res.json()
+    })
+    .catch(err=>console.log(err))
+}
+
+export const getUserProfile=(userId)=>{
+
+    const {user,token} = isAuthenticated()
+
+    return fetch(`${process.env.REACT_APP_BASE_URL}/user/${user._id}/profile/${userId}`,{
+        method:"GET",
+        headers:{
+            "auth-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(res=>{
+        return res.json()
+    })
+    .catch(err=>console.log(err))
+}
+
+export const getUserPosts=(userId)=>{
+
+    const {user,token} = isAuthenticated()
+
+    return fetch(`${process.env.REACT_APP_BASE_URL}/user/${user._id}/profile/${userId}/posts`,{
         method:"GET",
         headers:{
             "auth-token": token,

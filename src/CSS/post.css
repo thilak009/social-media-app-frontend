@@ -1,9 +1,11 @@
 
 .single-post-container{
-    background-color: #151a21;
+    background-color: var(--color-primary-800);
     height: auto;
     margin: 2px 0;
     color: #fff;
+    border-radius: 10px;
+    border: 1px solid var(--color-primary-600);
 }
 .post-user{
     display: flex;
@@ -13,23 +15,27 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #242c37;
-    padding: 6px;
+    border-bottom: 1px solid var(--color-primary-600);
+    padding: 2px 5px;
 }
 .profile-pic{
-    width: 2rem;
-    height: 2rem;
+    width: 2.3rem;
+    height: 2.3rem;
     border-radius: 50%;
     margin-right: 4px;
 }
 .post-info{
-    padding: 0.5rem;
-    border-bottom: 1px solid #242c37;
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid var(--color-primary-600);
+}
+.post-title{
+    margin-bottom: 2px;
 }
 .post-reactions{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 5px;
 }
 .votes{
     cursor: pointer;
@@ -37,12 +43,16 @@
 input{
     padding: 5px 0; 
     border-radius: 5px;
-    border:1px solid black;
+    border:1px solid var(--color-primary-900);
     font-size: 14px;
     margin-bottom: 10px;
+}
+.comments-container{
+    transition: 1s ease-in;
+    /* does not seem to work */
 }
 .comment-info{
     width: auto;
     margin-bottom: 1px;
-    border: 1px solid #242c37;
+    /* border: 1px solid var(--color-primary-700); */
 }

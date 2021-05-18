@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { createPost, getAllPosts } from '../user';
 import Navbar from './Navbar';
 import Post from './Post';
-import './CSS/home.css'
+import '../CSS/home.css'
 
 
 function Modal({ shown, close }) {
@@ -24,6 +24,7 @@ function Modal({ shown, close }) {
             createPost({title,description})
             .then(data=>{
                 console.log('post created');
+                alert('post created');
             })
             // document.getElementById('post-modal').style.display='none'
             close()
@@ -52,7 +53,7 @@ function Modal({ shown, close }) {
                 <h3>Create a post</h3>
                 <p id="post-error-message">enter all details</p>
                 <input type="text" onChange={handleChange("title")} placeholder="title" />
-                <input type="text" onChange={handleChange("description")} placeholder="description" />
+                <textarea type="text" onChange={handleChange("description")} placeholder="description" />
                 <div><button type="submit" onClick={onSubmit}>Post</button></div>
             </form>
         </div>
@@ -88,9 +89,9 @@ function Home() {
                     <div className="posts">
                         <div className="posts-container">
                         {
-                            posts.map((post,index)=>{
+                            posts.map((post)=>{
                                 return(
-                                    <Post key={index} post={post}/>
+                                    <Post key={post._id} post={post}/>
                                 )
                             })
                         }

@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import { signup } from '../auth';
-import './CSS/sign.css'
+import '../CSS/sign.css'
 
 function Signup() {
 
@@ -48,7 +48,7 @@ function Signup() {
     const signupForm=()=>{
         return(
             <div className="custom-form">
-                <form>
+                <form className="signin-login-form">
                     <h3>Signup</h3>
                     <input type="text" onChange={handleChange("username")} placeholder="Name"/>
                     <input type="email" onChange={handleChange("email")} placeholder="Email" />

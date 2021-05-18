@@ -45,11 +45,11 @@ function Signin() {
     const loginForm=()=>{
         return(
             <div className="custom-form">
-                <form>
+                <form className="signin-login-form">
                     <h3>Login</h3>
                     <input type="email" onChange={handleChange("email")} placeholder="Email" />
                     <input type="password" onChange={handleChange("password")} placeholder="Password" />
-                    <div><button type="submit" onClick={onSubmit}>Submit</button></div>
+                    <div><button type="submit" onClick={onSubmit}>Login</button></div>
                     <div className="redirect">
                         <p>Not a registerd User ?<Link className="link" to="/signup">Signup</Link></p>
                     </div>

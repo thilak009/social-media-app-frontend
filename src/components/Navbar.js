@@ -5,10 +5,12 @@ import {GoHome} from 'react-icons/go';
 import {IoCreateOutline} from 'react-icons/io5';
 import {RiLogoutBoxLine} from 'react-icons/ri';
 import {BsPerson} from 'react-icons/bs'
-import './CSS/navbar.css'
+import '../CSS/navbar.css'
 
 function Navbar({toggle}) {
 
+    const {user} = isAuthenticated();
+    
     const [redirect,setRedirect] = useState(false);
    
     const signout=()=>{
@@ -38,7 +40,7 @@ function Navbar({toggle}) {
                         </p>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-item" to="/profile"><BsPerson/><span className="icon-info">Profile</span></Link>
+                        <Link className="nav-item" to={`/profile/${user?user._id:""}`}><BsPerson/><span className="icon-info">Profile</span></Link>
                     </li>
                     {
                         isAuthenticated() && (

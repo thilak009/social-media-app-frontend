@@ -1,10 +1,13 @@
 import React, { useRef, useState } from 'react'
-import './CSS/post.css'
+import '../CSS/post.css'
 import moment from 'moment'
 import { createComment, deletePost } from '../user';
 import { isAuthenticated } from '../auth';
 import Comments from './Comments';
 import {BiUpvote, BiDownvote} from 'react-icons/bi'
+//import UserProfile from './UserProfile';
+import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
 
 function Post({post}) {
 
@@ -27,7 +30,7 @@ function Post({post}) {
         deletePost(postInfo)
         .then(data=>{
             console.log('post deleted');
-            //postRef.current.style.display = 'none';
+            postRef.current.style.display = 'none';
         })
         .catch(err=>console.log(err))
     }
@@ -54,22 +57,41 @@ function Post({post}) {
             })
         }
     }
-    //TODO: not all users have profile pics
-    //updated so make this a function to check if pic
-    //exists and hen initialize url
-    const url = user? `${process.env.REACT_APP_BASE_URL}/user/profile/${postedBy._id}/photo` : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiItt22A_L72PzeDPjBtenrPD5QPH5CpF8-Q&usqp=CAU'
+    //TODO: why the hell redirect is not working
+    const showUserProfile=()=>{
+        
+        return <Redirect to={`/profile/${postedBy._id}`}/>
+    }
+    const profileClickable=()=>{
+        if(window.location.pathname == '/'){
+            return(
+                <Link to={`/profile/${postedBy._id}`}>
+                    <img src={profilePicUrl} className="profile-pic" alt="profile pic"/>
+                </Link>
+            )
+        }
+        else{
+            return(
+                <img src={profilePicUrl} className="profile-pic" alt="profile pic"/>
+            )
+        }
+    }
+    
+    const profilePicUrl = user ? `${process.env.REACT_APP_BASE_URL}/user/profile/${postedBy._id}/photo` : ''
     
     return (
         <div className="single-post-container" ref={postRef}>
             <div className="post-user-info">
                 <div className="post-user">
-                    <img src={url} className="profile-pic" alt="profile pic"/>
+                    {
+                        profileClickable()
+                    }
                     <h4>{postedBy.username}</h4>
                 </div>
                 <h6>{moment(createdAt).format('MMMM Do YYYY, h:mm:ss a')}</h6>
             </div>
             <div className="post-info">
-                <h3>{title}</h3>
+                <h3 className="post-title">{title}</h3>
                 <p>{description}</p>
             </div>
             <div className="post-reactions">
