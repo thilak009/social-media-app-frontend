@@ -1,22 +1,30 @@
-import React, { useRef, useState } from 'react'
-import '../CSS/post.css'
-import moment from 'moment'
+import React, { useEffect, useRef, useState } from 'react';
+import '../CSS/post.css';
+import moment from 'moment';
 import { createComment, deletePost } from '../user';
 import { isAuthenticated } from '../auth';
 import Comments from './Comments';
-import {BiUpvote, BiDownvote} from 'react-icons/bi'
-//import UserProfile from './UserProfile';
+import {BiUpvote, BiDownvote} from 'react-icons/bi';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
+import { upVote, removeUpVote, downVote, removeDownVote } from '../user/profile';
 
 function Post({post}) {
 
-    const [commentField,setCommentField] = useState(false)
+    const {user} = isAuthenticated()
+    const {_id,title,description,postedBy,createdAt,upvoted,downvoted,count}=post
+
     const commentRef = useRef()
     const postRef = useRef()
     
-    const {_id,title,description,postedBy,createdAt}=post;
-    const {user} = isAuthenticated()
+    const [commentField,setCommentField] = useState(false)
+    const [upvote,setUpvote] = useState(upvoted)
+    const [downvote,setDownvote] = useState(downvoted)
+    const [votesCount,setVotesCount] = useState(count)
+
+    useEffect(()=>{
+
+    },[upvote,downvote])
 
     const removePost=()=>{
         
@@ -24,9 +32,6 @@ function Post({post}) {
             postId: _id,
             userId: postedBy._id
         }
-        //to avoid re rendering after deletion if necessary
-        //just hide the respective post and when pagee or home is 
-        //refreshed it wont show up as it is deleted from DB
         deletePost(postInfo)
         .then(data=>{
             console.log('post deleted');
@@ -63,7 +68,7 @@ function Post({post}) {
         return <Redirect to={`/profile/${postedBy._id}`}/>
     }
     const profileClickable=()=>{
-        if(window.location.pathname == '/'){
+        if(window.location.pathname === '/'){
             return(
                 <Link to={`/profile/${postedBy._id}`}>
                     <img src={profilePicUrl} className="profile-pic" alt="profile pic"/>
@@ -76,7 +81,45 @@ function Post({post}) {
             )
         }
     }
-    
+    const checkAndUpvote=()=>{
+
+        if(!upvote){
+            upVote(_id)
+            .then(data=>{
+                setUpvote(true)
+                downvote?setVotesCount(votesCount+2):setVotesCount(votesCount+1)
+                setDownvote(false)
+            })
+            .catch(err=>console.log(err))
+        }
+        else{
+            removeUpVote(_id)
+            .then(data=>{
+                setUpvote(false)
+                setVotesCount(votesCount-1)
+            })
+            .catch(err=>console.log(err))
+        }
+    }
+    const checkAndDownvote=()=>{
+        if(!downvote){
+            downVote(_id)
+            .then(data=>{
+                setDownvote(true)
+                upvote?setVotesCount(votesCount-2):setVotesCount(votesCount-1)
+                setUpvote(false)
+            })
+            .catch(err=>console.log(err))
+        }
+        else{
+            removeDownVote(_id)
+            .then(data=>{
+                setDownvote(false)
+                setVotesCount(votesCount+1)
+            })
+            .catch(err=>console.log(err))
+        }
+    }
     const profilePicUrl = user ? `${process.env.REACT_APP_BASE_URL}/user/profile/${postedBy._id}/photo` : ''
     
     return (
@@ -96,8 +139,9 @@ function Post({post}) {
             </div>
             <div className="post-reactions">
                 <div className="votes">
-                    <BiUpvote/>
-                    <BiDownvote/>
+                    <BiUpvote style={{color: upvote && "#5575e7"}} onClick={checkAndUpvote}/>
+                    <p>{votesCount}</p>
+                    <BiDownvote style={{color: downvote && "#fd4d4d"}} onClick={checkAndDownvote}/>
                 </div>
                 {
                     (user._id === postedBy._id) && (

@@ -39,6 +39,7 @@
 }
 .votes{
     cursor: pointer;
+    display: flex;
 }
 input{
     padding: 5px 0; 

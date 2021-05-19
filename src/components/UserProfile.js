@@ -18,6 +18,7 @@ function UserProfile() {
     const [userProfile,setUserProfile] = useState({});
     const [showForm,setShowForm] = useState(false)
     const [followData,setFollowData] = useState({})
+    const [followDataChanged,setFollowDataChanged] = useState(false)
     const [images,setImages] = useState([]);
     const [selectedImage,setSelectedImage] = useState('')
     const [values,setValues] = useState({
@@ -69,7 +70,7 @@ function UserProfile() {
             setFollowData(data)
         })
         .catch(err=>console.log(err))
-    },[followData])
+    },[followDataChanged])
 
     const handleChange= name => event =>{
         const value = name === "photo" ? event.target.files[0]:event.target.value;
@@ -100,7 +101,7 @@ function UserProfile() {
 
         removeFollow(userId)
         .then(data=>{
-            setFollowData(...followData,{follow: false})
+            setFollowDataChanged(!followDataChanged)
         })
         .catch(err=>console.log(err))
     }
@@ -108,7 +109,7 @@ function UserProfile() {
 
         setFollow(userId)
         .then(data=>{
-            setFollowData(...followData,{follow: true})
+            setFollowDataChanged(!followDataChanged)
         })
         .catch(err=>console.log(err))
     }
