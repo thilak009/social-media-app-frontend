@@ -37,6 +37,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
   background-color: var(--color-primary-900);
+  color: #fff;
 }
 /* input:focus{
   outline: 1px solid var(--color-primary-300);

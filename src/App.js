@@ -6,6 +6,7 @@ import Home from './components/Home';
 import Signup from './components/Signup';
 //import Profile from './components/Profile';
 import UserProfile from './components/UserProfile';
+import PageNotFound from './components/PageNotFound';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <PrivateRoute exact path='/' component={Home}></PrivateRoute>
         {/* <PrivateRoute exact path="/profile" component={UserProfile}></PrivateRoute> */}
         <PrivateRoute exact path="/profile/:userId" component={UserProfile}></PrivateRoute>
+        <Route path="*" component={PageNotFound}></Route>
       </Switch>
     </Router>
   );

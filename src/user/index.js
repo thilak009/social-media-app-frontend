@@ -1,10 +1,8 @@
 import { isAuthenticated } from "../auth";
 
-
 export const getAllPosts=()=>{
     
     const {user,token} = isAuthenticated()
-
     return fetch(`${process.env.REACT_APP_BASE_URL}/user/${user._id}/`,{
         method:"GET",
         headers:{

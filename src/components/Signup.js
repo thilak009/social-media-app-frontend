@@ -50,7 +50,7 @@ function Signup() {
             <div className="custom-form">
                 <form className="signin-login-form">
                     <h3>Signup</h3>
-                    <input type="text" onChange={handleChange("username")} placeholder="Name"/>
+                    <input type="text" onChange={handleChange("username")} placeholder="Username"/>
                     <input type="email" onChange={handleChange("email")} placeholder="Email" />
                     <input type="password" onChange={handleChange("password")} placeholder="Password" />
                     <div><button type="submit" onClick={onSubmit}>Register</button></div>

@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { getUserPosts, getUserProfile } from '../user';
 import Post from './Post';
 import moment from 'moment';
-import { useParams } from 'react-router-dom';
-import { checkFollow, editProfile, removeFollow, setFollow,updateProfilePhoto} from '../user/profile';
-import {AiOutlineEdit} from 'react-icons/ai'
+import { Link, useParams } from 'react-router-dom';
+import { checkFollow, editProfile, removeFollow, setFollow,updateProfilePhoto, getImagesFromCatalog} from '../user/profile';
+import {AiOutlineEdit} from 'react-icons/ai';
+import {IoArrowBackSharp} from 'react-icons/io5';
 import { isAuthenticated } from '../auth';
-import '../CSS/profile.css'
+import '../CSS/profile.css';
+import {loadingAnimation, loadingScreen} from './LoadingScreen';
 
 
 function UserProfile() {
@@ -28,31 +30,38 @@ function UserProfile() {
         fullname: "",
         bio: ""
     })
+    const [loading,setLoading] = useState(false)
+    const [picsLoading,setPicsLoading] = useState(false)
     const {formData} = values;
 
     const setForm=()=>{
         setValues({...values, formData: new FormData()});
     }
-    const getImages=async()=>{
-
-        const response = await fetch(`${process.env.REACT_APP_BASE_URL}/helper/get-images`,{
-            method:"GET"
+    const getImages=()=>{
+        setPicsLoading(true)
+        getImagesFromCatalog()
+        .then(data=>{
+            setImages(data)
+            setPicsLoading(false)
         })
-        const data = await response.json();
-        setImages(data);
-        //console.log(data);
     }
     useEffect(()=>{
 
+    },[loading,picsLoading])
+
+    useEffect(()=>{
+        setLoading(true)
         getUserProfile(userId)
         .then(data=>{
             setUserProfile(data)
+            
         })
         .catch(err=>console.log(err))
 
         getUserPosts(userId)
         .then(data=>{
             setPosts(data)
+            setLoading(false)
         })
         .catch(err=>console.log(err))
 
@@ -60,7 +69,7 @@ function UserProfile() {
         if(userId === user._id){
             getImages()
         }
-       
+       console.log("in profile");
     },[])
     
     //for re-rendering when followed/unfollowed
@@ -80,8 +89,7 @@ function UserProfile() {
     }
     const onSubmit=(e)=>{
         e.preventDefault();
-        console.log(...formData);
-
+        
         editProfile(formData)
         .then(data=>{
             if(data.error){
@@ -169,12 +177,29 @@ function UserProfile() {
                         <p>{followData.followers} Followers</p>
                         <p style={{marginLeft:"4px"}}>{followData.following} Following</p>
                     </div>
-                    <div style={{}}> 
+                    <div> 
                         <p>{userProfile.bio}</p>
                         <p>Joined on : {moment(userProfile.date).format('MMMM YYYY')}</p>
                     </div>
                 </div>
                 
+            </div>
+        )
+    }
+    const profilePicsListToChoose=()=>{
+        return(
+            <div className="profile-pics-list">
+                {
+                    images.map((image,index)=>{
+                        const url = `${process.env.REACT_APP_BASE_URL}/helper/${image.name}`
+                        return(
+                            <div onClick={()=> selectImage(image.name)}
+                            id={image.name} className="profile-pic-container" key={index}>
+                                <img src={url}  alt="none" className="profile-pic-image"/>
+                            </div>
+                        )
+                    })
+                }
             </div>
         )
     }
@@ -208,19 +233,9 @@ function UserProfile() {
                     </form>
                     <div className="profile-pics-container">
                         <p>Or choose from our amazing Catalog:</p><br/>
-                        <div className="profile-pics-list">
-                            {
-                                images.map((image,index)=>{
-                                    const url = `${process.env.REACT_APP_BASE_URL}/helper/${image.name}`
-                                    return(
-                                        <div onClick={()=> selectImage(image.name)}
-                                        id={image.name} className="profile-pic-container" key={index}>
-                                            <img src={url}  alt="none" className="profile-pic-image"/>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
+                        {
+                            picsLoading?loadingAnimation():profilePicsListToChoose()
+                        }
                     </div>
                     <button onClick={updateImage}>Save Image</button>
                 </div>
@@ -246,9 +261,14 @@ function UserProfile() {
     return (
         <div className="user-profile-page">
             <div className="user-profile-center">
-                {userInfo()}
-                {userUpdateForm()}
-                {userPosts()}
+                <div className="back-button-container">
+                    <Link to="/" style={{color:"#fd6868"}}>
+                        <span style={{fontSize:"20px",cursor:"pointer"}}><IoArrowBackSharp/></span>
+                    </Link>
+                </div>
+                {
+                    loading ? loadingScreen():[userInfo(),userUpdateForm(),userPosts()]
+                }
             </div>
         </div>
     )

@@ -2,7 +2,7 @@
 export const signup=(user)=>{
 
     const {username,email,password} = user;
-    return fetch('http://localhost:5500/api/user/register',{
+    return fetch(`${process.env.REACT_APP_BASE_URL}/user/register`,{
             method:"POST",
             headers:{
                 "Content-Type":"application/json"
@@ -22,7 +22,7 @@ export const signup=(user)=>{
 export const signin=(user)=>{
 
     const {email,password} = user;
-    return fetch('http://localhost:5500/api/user/login',{
+    return fetch(`${process.env.REACT_APP_BASE_URL}/user/login`,{
         method:"POST",
         headers:{
             "Content-Type":"application/json"

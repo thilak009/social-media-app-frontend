@@ -7,24 +7,32 @@ import Comments from './Comments';
 import {BiUpvote, BiDownvote} from 'react-icons/bi';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import { upVote, removeUpVote, downVote, removeDownVote } from '../user/profile';
+import { upVote, removeUpVote, downVote, removeDownVote, getVoteDetails } from '../user/profile';
+
 
 function Post({post}) {
 
     const {user} = isAuthenticated()
-    const {_id,title,description,postedBy,createdAt,upvoted,downvoted,count}=post
+    const {_id,title,description,postedBy,createdAt}=post
 
     const commentRef = useRef()
     const postRef = useRef()
     
     const [commentField,setCommentField] = useState(false)
-    const [upvote,setUpvote] = useState(upvoted)
-    const [downvote,setDownvote] = useState(downvoted)
-    const [votesCount,setVotesCount] = useState(count)
+    const [voteDetails,setVoteDetails] = useState({})
+    const [votesChanged,setVotesChanged] = useState(false)
+
 
     useEffect(()=>{
+        
+        getVoteDetails(_id)
+        .then(data=>{
+            setVoteDetails(data)
+        })
+        .catch(err=>console.log(err))
+    },[votesChanged])
 
-    },[upvote,downvote])
+    const {upvoted,downvoted,upvoteCount,downvoteCount} = voteDetails
 
     const removePost=()=>{
         
@@ -83,39 +91,33 @@ function Post({post}) {
     }
     const checkAndUpvote=()=>{
 
-        if(!upvote){
-            upVote(_id)
+        if(!upvoted){
+            upVote(_id,downvoted)
             .then(data=>{
-                setUpvote(true)
-                downvote?setVotesCount(votesCount+2):setVotesCount(votesCount+1)
-                setDownvote(false)
+                setVotesChanged(!votesChanged)
             })
             .catch(err=>console.log(err))
         }
         else{
             removeUpVote(_id)
             .then(data=>{
-                setUpvote(false)
-                setVotesCount(votesCount-1)
+                setVotesChanged(!votesChanged)
             })
             .catch(err=>console.log(err))
         }
     }
     const checkAndDownvote=()=>{
-        if(!downvote){
-            downVote(_id)
+        if(!downvoted){
+            downVote(_id,upvoted)
             .then(data=>{
-                setDownvote(true)
-                upvote?setVotesCount(votesCount-2):setVotesCount(votesCount-1)
-                setUpvote(false)
+                setVotesChanged(!votesChanged)
             })
             .catch(err=>console.log(err))
         }
         else{
             removeDownVote(_id)
             .then(data=>{
-                setDownvote(false)
-                setVotesCount(votesCount+1)
+                setVotesChanged(!votesChanged)
             })
             .catch(err=>console.log(err))
         }
@@ -129,7 +131,10 @@ function Post({post}) {
                     {
                         profileClickable()
                     }
-                    <h4>{postedBy.username}</h4>
+                    <div>
+                        <h4>{postedBy.fullname}</h4>
+                        <p style={{color:"grey"}}>@{postedBy.username}</p>
+                    </div>
                 </div>
                 <h6>{moment(createdAt).format('MMMM Do YYYY, h:mm:ss a')}</h6>
             </div>
@@ -139,9 +144,10 @@ function Post({post}) {
             </div>
             <div className="post-reactions">
                 <div className="votes">
-                    <BiUpvote style={{color: upvote && "#5575e7"}} onClick={checkAndUpvote}/>
-                    <p>{votesCount}</p>
-                    <BiDownvote style={{color: downvote && "#fd4d4d"}} onClick={checkAndDownvote}/>
+                    <BiUpvote style={{color: upvoted && "#5575e7"}} onClick={checkAndUpvote}/>
+                    <p>{upvoteCount}</p>
+                    <BiDownvote style={{color: downvoted && "#fd4d4d"}} onClick={checkAndDownvote}/>
+                    <p>{downvoteCount}</p>
                 </div>
                 {
                     (user._id === postedBy._id) && (

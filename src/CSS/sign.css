@@ -14,7 +14,7 @@
     border-radius: 5px;
     margin-bottom: 20px;
     text-align: center;
-    color: #fff;
+    /* color: #fff; */
 }
 .signin-login-form > input{
     width: 90%;
