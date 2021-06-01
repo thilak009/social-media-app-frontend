@@ -36,10 +36,8 @@
 }
 .user-main{
     display: flex;
+    align-items: center;
 }
-/* .user-update-options{
-    color: #fff;
-} */
 /* .profile-pics-container{
     display: flex;
     justify-content: center;

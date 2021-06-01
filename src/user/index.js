@@ -1,6 +1,6 @@
 import { isAuthenticated } from "../auth";
 
-export const getAllPosts=()=>{
+export const getAllPosts=(lastId)=>{
     
     const {user,token} = isAuthenticated()
     return fetch(`${process.env.REACT_APP_BASE_URL}/user/${user._id}/`,{
@@ -8,6 +8,7 @@ export const getAllPosts=()=>{
         headers:{
             "auth-token": token,
             "Content-Type": "application/json",
+            "lastId": lastId
         }
     })
     .then(res=>{

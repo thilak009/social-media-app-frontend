@@ -6,6 +6,7 @@ import { Link, useParams } from 'react-router-dom';
 import { checkFollow, editProfile, removeFollow, setFollow,updateProfilePhoto, getImagesFromCatalog} from '../user/profile';
 import {AiOutlineEdit} from 'react-icons/ai';
 import {IoArrowBackSharp} from 'react-icons/io5';
+import {AiOutlineMessage} from 'react-icons/ai'
 import { isAuthenticated } from '../auth';
 import '../CSS/profile.css';
 import {loadingAnimation, loadingScreen} from './LoadingScreen';
@@ -157,21 +158,31 @@ function UserProfile() {
                     <div className="user-main">
                         <div>
                             <h3>{userProfile.fullname}</h3>
-                            <p>@{userProfile.username}</p>
+                            
                         </div>
+                        <div>
                         {
                             (userId === user._id) && <AiOutlineEdit onClick={showProfileEditForm} 
                                 style={{fontSize:"20px",cursor:"pointer",marginLeft:"5px"}}/>
                         }
                         {
                             (userId !== user._id) && (
-                                <div style={{marginLeft:"5px"}}>
+                                <div style={{marginLeft:"5px",display:'flex',gap:"5px"}}>
+                                    <div>
                                     {
                                         followData.follow ? <button onClick={removeAsFollower}>Unfollow</button> :<button onClick={setAsFollower}>Follow</button>
                                     }
+                                    </div>
+                                    <div>
+                                    <Link to={`/${userId}/chat`}><AiOutlineMessage style={{fontSize:"22px",color:"#fd4d4d",height:"25px"}}/></Link>
+                                    </div>
                                 </div>
                             )
                         }
+                        </div>
+                    </div>
+                    <div>
+                        <p>@{userProfile.username}</p>
                     </div>
                     <div style={{display:"flex"}}>
                         <p>{followData.followers} Followers</p>
@@ -247,9 +258,9 @@ function UserProfile() {
             <div className="posts">
                 <div className="posts-container">
                 {
-                    posts.map((post,index)=>{
+                    posts.map((post)=>{
                         return(
-                            <Post key={index} post={post}/>
+                            <Post key={post._id} post={post}/>
                         )
                     })
                 }

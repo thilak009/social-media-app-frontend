@@ -1,14 +1,4 @@
-/* --color-primary-100: #dee3ea;
-  --color-primary-200: #b2bdcd;
-  --color-primary-300: #5d7290;
-  --color-primary-600: #323d4d;
-  --color-primary-700: #242c37;
-  --color-primary-800: #151a21;
-  --color-primary-900: #0b0e11;
-  --color-secondary: #5575e7;
-  --color-red: #fd4d4d;
-  --color-red-hover: #fd6868;
-  --color-red-disabled: #f5bfbf; */
+
 @import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
 :root{
   --color-primary-100: #dee3ea;
@@ -38,6 +28,13 @@ body {
   box-sizing: border-box;
   background-color: var(--color-primary-900);
   color: #fff;
+  scrollbar-color: var(--color-primary-600) var(--color-primary-800);
+}
+a{
+  text-decoration: none;
+}
+li{
+  list-style-type: none;
 }
 /* input:focus{
   outline: 1px solid var(--color-primary-300);

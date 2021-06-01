@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-//import { isAuthenticated } from '../auth';
 import { createPost, getAllPosts } from '../user';
 import Navbar from './Navbar';
 import Post from './Post';
@@ -67,26 +66,38 @@ function Home() {
     const [modalShown, toggleModal] = useState(false)
     const [posts,setPosts] = useState([])
     const [loading,setLoading] = useState(false)
-
+    const [lastId,setLastId] = useState('')
+    const [extraPostsAvailable,setExtraPostsAvailable] = useState(true)
     useEffect(()=>{
-        
     },[loading])
 
     useEffect(()=>{
         getData();
-        console.log("in home");
     },[])
 
     const getData=()=>{
 
         setLoading(true);
-        getAllPosts()
+        getAllPosts(lastId)
         .then(data=>{
-            setPosts(data);
+            setPosts([...posts,...data]);
             setLoading(false);
+            setLastId(data.slice(-1)[0]._id)
         })
     }
-    
+    const loadMorePosts=()=>{
+        getAllPosts(lastId)
+        .then(data=>{
+            setPosts([...posts,...data]);
+            if(data.length>0){
+                setLastId(data.slice(-1)[0]._id)
+                setExtraPostsAvailable(true)
+            }
+            else{
+                setExtraPostsAvailable(false)
+            }
+        })
+    }
     const homePage=()=>{
         return(
             <div className="home">
@@ -104,6 +115,11 @@ function Home() {
                             })
                         }
                         </div>
+                    </div>
+                    <div style={{display:"flex",justifyContent:"center"}}>
+                        {
+                            extraPostsAvailable ?<button onClick={loadMorePosts}>See More Posts</button>:<p>You have reached the end of the road</p>
+                        }
                     </div>
                     <Modal
                         shown={modalShown}
