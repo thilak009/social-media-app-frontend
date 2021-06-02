@@ -8,10 +8,11 @@ import {BiUpvote, BiDownvote} from 'react-icons/bi';
 import {AiOutlineClose} from 'react-icons/ai'
 import { Link } from 'react-router-dom';
 import { upVote, removeUpVote, downVote, removeDownVote, getVoteDetails } from '../user/profile';
-
+import {useHistory} from 'react-router-dom'
 
 function CommentModal({post,shown,close}){
 
+    const history = useHistory()
     const {user} = isAuthenticated()
     const {_id,title,description,postedBy,createdAt}=post
     const commentRef = useRef()
@@ -33,8 +34,9 @@ function CommentModal({post,shown,close}){
         
             createComment(details)
             .then(data=>{
-                console.log(data);
+                console.log(data)
                 close()
+                history.goBack()
             })
         }
     }
@@ -54,10 +56,10 @@ function CommentModal({post,shown,close}){
     }
     const profilePicUrl = user ? `${process.env.REACT_APP_BASE_URL}/user/profile/${postedBy._id}/photo` : ''
     return shown ? (
-        <div className="modal-backdrop" onClick={()=>close()}>
+        <div className="modal-backdrop" onClick={()=>[close(),history.goBack()]}>
             <div className="comment-modal" onClick={e=>{e.stopPropagation()}}>
                 <div style={{padding:"5px"}}>
-                    <AiOutlineClose style={{fontSize:"22px",cursor:"pointer"}} onClick={()=>close()}/>
+                    <AiOutlineClose style={{fontSize:"22px",cursor:"pointer"}} onClick={()=>[close(),history.goBack()]}/>
                 </div>
                 <div className="post-user-info">
                     <div className="post-user">
@@ -71,7 +73,7 @@ function CommentModal({post,shown,close}){
                     </div>
                     <h6>{moment(createdAt).format('MMMM Do YYYY, H:mm')}</h6>
                 </div>
-                <div className="post-info">
+                <div className="post-info post-info-in-modal">
                     <h3 className="post-title">{title}</h3>
                     <p>{description}</p>
                 </div>
@@ -86,6 +88,7 @@ function CommentModal({post,shown,close}){
 
 function Post({post}) {
 
+    const history = useHistory()
     const {user} = isAuthenticated()
     const {_id,title,description,postedBy,createdAt}=post
 
@@ -96,9 +99,15 @@ function Post({post}) {
     const [voteDetails,setVoteDetails] = useState({})
     const [votesChanged,setVotesChanged] = useState(false)
 
-
     useEffect(()=>{
-        
+        return history.listen(location=>{
+            if(history.action === "POP"){
+                toggleModalShown(false)
+                togglePostModal(false)
+            }
+        })
+    },[])
+    useEffect(()=>{
         getVoteDetails(_id)
         .then(data=>{
             setVoteDetails(data)
@@ -185,7 +194,7 @@ function Post({post}) {
                 </div>
                 <h6>{moment(createdAt).isSame(moment(),'day')?moment(createdAt).fromNow():moment(createdAt).format('MMMM Do YYYY, H:mm')}</h6>
             </div>
-            <div className="post-info" onClick={()=> togglePostModal(!postModal)}
+            <div className={`post-info ${description.length > 1000?"post-info-in-modal":""}`} onClick={()=> [togglePostModal(!postModal),history.push('#post')]}
                 style={{cursor:"pointer"}}>
                 <h3 className="post-title">{title}</h3>
                 <p>{description}</p>
@@ -202,7 +211,7 @@ function Post({post}) {
                         <button onClick={removePost}>delete</button>
                     )
                 }
-                <button onClick={()=> toggleModalShown(!modalShown)}>Comment</button>
+                <button onClick={()=> [toggleModalShown(!modalShown),history.push('#comment')]}>Comment</button>
             </div>
             <CommentModal 
                 post={post}

@@ -49,8 +49,8 @@ function Signin() {
                     <h3>Login</h3>
                     <input type="email" onChange={handleChange("email")} placeholder="Email" />
                     <input type="password" onChange={handleChange("password")} placeholder="Password" />
-                    <div><button type="submit" onClick={onSubmit}>Login</button></div>
-                    <div className="redirect">
+                    <div><button type="submit" onClick={onSubmit} style={{fontSize:"18px"}}>Login</button></div>
+                    <div className="redirect" style={{fontSize:"18px"}}>
                         <p>Not a registerd User ?<Link className="link" to="/signup">Signup</Link></p>
                     </div>
                 </form>

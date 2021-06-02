@@ -4,12 +4,13 @@ import '../CSS/post.css'
 import { loadingAnimation } from './LoadingScreen'
 import {AiOutlineClose} from 'react-icons/ai'
 import moment from 'moment'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { isAuthenticated } from '../auth'
 
 
 function Comments({post,shown,close}) {
 
+    const history = useHistory()
     const {user} =isAuthenticated()
     const {_id,title,description,postedBy,createdAt}=post
 
@@ -22,11 +23,6 @@ function Comments({post,shown,close}) {
 
     },[loading])
     useEffect(()=>{
-        // setLoading(true)
-        //TODO: see if you can stop loading data
-        //whenevr comment button is clicked, may be store the
-        //first response(comments) and display them if no new
-        //comment is aadded
         fetchComments()
     },[])
     const fetchComments=()=>{
@@ -75,7 +71,7 @@ function Comments({post,shown,close}) {
             <div className="comments-page">
                 <div className="comments-container">
                     <div>
-                        <AiOutlineClose style={{fontSize:"22px",cursor:"pointer"}} onClick={()=>close()}/>
+                        <AiOutlineClose style={{fontSize:"22px",cursor:"pointer"}} onClick={()=>[close(),history.goBack()]}/>
                     </div>
                     <div className="post-user-info">
                         <div className="post-user">
@@ -89,7 +85,7 @@ function Comments({post,shown,close}) {
                         </div>
                         <h6>{moment(createdAt).format('MMMM Do YYYY, H:mm')}</h6>
                     </div>
-                    <div className="post-info">
+                    <div className="post-info post-info-in-modal">
                         <h3 className="post-title">{title}</h3>
                         <p>{description}</p>
                     </div>
@@ -97,7 +93,7 @@ function Comments({post,shown,close}) {
                         <input ref={commentRef} type="text" placeholder="comment"/>
                         <button onClick={comment}>Comment</button>
                     </form>
-                    <div>
+                    <div className="actual-comments">
                         {   
                         show && (
                             comments.map((comment)=>{

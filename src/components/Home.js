@@ -4,10 +4,13 @@ import Navbar from './Navbar';
 import Post from './Post';
 import '../CSS/home.css';
 import {loadingScreen} from './LoadingScreen';
+import { useHistory } from 'react-router';
 
 
+// window.addEventListener('')
 function Modal({ shown, close }) {
     
+    const history = useHistory()
     const [postValues,setPostValues] = useState({
         title:"",
         description:""
@@ -28,6 +31,7 @@ function Modal({ shown, close }) {
             })
             // document.getElementById('post-modal').style.display='none'
             close()
+            history.goBack()
         }
         else{
             document.getElementById('post-error-message').style.display='block'
@@ -37,10 +41,9 @@ function Modal({ shown, close }) {
       <div
         className="modal-backdrop"
         id="post-modal"
-        onClick={() => {
+        onClick={() => [close(),history.goBack()]
           // close modal when outside of modal is clicked
-          close();
-        }}
+        }
       >
         <div
           className="modal-content"
@@ -63,6 +66,7 @@ function Modal({ shown, close }) {
 
 function Home() {
 
+    const history = useHistory()
     const [modalShown, toggleModal] = useState(false)
     const [posts,setPosts] = useState([])
     const [loading,setLoading] = useState(false)
@@ -72,7 +76,12 @@ function Home() {
     },[loading])
 
     useEffect(()=>{
-        getData();
+        getData()
+        return history.listen(location=>{
+            if(history.action === "POP"){
+                toggleModal(false)
+            }
+        })
     },[])
 
     const getData=()=>{

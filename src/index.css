@@ -36,6 +36,9 @@ a{
 li{
   list-style-type: none;
 }
+textarea{
+  resize: none;
+}
 /* input:focus{
   outline: 1px solid var(--color-primary-300);
 } */

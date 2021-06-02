@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{ useState} from 'react'
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import { signup } from '../auth';
@@ -10,27 +10,33 @@ function Signup() {
         username:"",
         email:"",
         password:"",
+        confirmPassword:"",
         redirect:false
     })
+
     const onSubmit=(e)=>{
 
         e.preventDefault();
-        const {username,email,password} = values;
+        const {username,email,password,confirmPassword} = values;
         
         if(password.length < 6){
             return alert('password should be atleast 6 char long')
         }
-
-        signup({username,email,password})
-        .then(data=>{
-            if(data.error){
-                alert(data.error)
-            }
-            else{
-                alert("user registered")
-                setValues({...values,redirect: true})
-            }
-        })
+        if(password !== confirmPassword){
+            alert(`password does not match`)
+        }
+        if(username && email && password === confirmPassword){
+            signup({username,email,password})
+            .then(data=>{
+                if(data.error){
+                    alert(data.error)
+                }
+                else{
+                    alert("user registered")
+                    setValues({...values,redirect: true})
+                }
+            })
+        }
     }
 
     const performRedirect=()=>{
@@ -53,8 +59,9 @@ function Signup() {
                     <input type="text" onChange={handleChange("username")} placeholder="Username"/>
                     <input type="email" onChange={handleChange("email")} placeholder="Email" />
                     <input type="password" onChange={handleChange("password")} placeholder="Password" />
-                    <div><button type="submit" onClick={onSubmit}>Register</button></div>
-                    <div className="redirect">
+                    <input type="password" onChange={handleChange("confirmPassword")} placeholder="Confirm Password" />
+                    <div><button type="submit" onClick={onSubmit} style={{fontSize:"18px"}}>Register</button></div>
+                    <div className="redirect" style={{fontSize:"18px"}}>
                         <p>Already a User ?<Link className="link" to="/signin">Login</Link></p>
                     </div>
                 </form>

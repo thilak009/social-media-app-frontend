@@ -55,7 +55,6 @@ function UserProfile() {
         getUserProfile(userId)
         .then(data=>{
             setUserProfile(data)
-            
         })
         .catch(err=>console.log(err))
 
@@ -70,7 +69,6 @@ function UserProfile() {
         if(userId === user._id){
             getImages()
         }
-       console.log("in profile");
     },[])
     
     //for re-rendering when followed/unfollowed
@@ -145,6 +143,7 @@ function UserProfile() {
             if(image.name !== name){
                 document.getElementById(image.name).style.backgroundColor="#0b0e11"
             }
+            return image;
         })
     }
     //HTML return functions to make code more readable
@@ -158,7 +157,6 @@ function UserProfile() {
                     <div className="user-main">
                         <div>
                             <h3>{userProfile.fullname}</h3>
-                            
                         </div>
                         <div>
                         {
@@ -167,7 +165,7 @@ function UserProfile() {
                         }
                         {
                             (userId !== user._id) && (
-                                <div style={{marginLeft:"5px",display:'flex',gap:"5px"}}>
+                                <div style={{marginLeft:"5px",display:'flex',gap:"10px"}}>
                                     <div>
                                     {
                                         followData.follow ? <button onClick={removeAsFollower}>Unfollow</button> :<button onClick={setAsFollower}>Follow</button>
@@ -201,11 +199,11 @@ function UserProfile() {
         return(
             <div className="profile-pics-list">
                 {
-                    images.map((image,index)=>{
+                    images.map((image)=>{
                         const url = `${process.env.REACT_APP_BASE_URL}/helper/${image.name}`
                         return(
-                            <div onClick={()=> selectImage(image.name)}
-                            id={image.name} className="profile-pic-container" key={index}>
+                            <div key={image.name} onClick={()=> selectImage(image.name)}
+                            id={image.name} className="profile-pic-container">
                                 <img src={url}  alt="none" className="profile-pic-image"/>
                             </div>
                         )
@@ -274,7 +272,7 @@ function UserProfile() {
             <div className="user-profile-center">
                 <div className="back-button-container">
                     <Link to="/" style={{color:"#fd6868"}}>
-                        <span style={{fontSize:"20px",cursor:"pointer"}}><IoArrowBackSharp/></span>
+                        <span style={{fontSize:"25px",cursor:"pointer"}}><IoArrowBackSharp/></span>
                     </Link>
                 </div>
                 {

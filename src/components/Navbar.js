@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import { isAuthenticated } from '../auth';
 import {GoHome} from 'react-icons/go';
 import {IoCreateOutline} from 'react-icons/io5';
@@ -9,6 +9,7 @@ import '../CSS/navbar.css'
 
 function Navbar({toggle}) {
 
+    const history = useHistory()
     const {user} = isAuthenticated();
     
     const [redirect,setRedirect] = useState(false);
@@ -34,7 +35,7 @@ function Navbar({toggle}) {
                         <Link className="nav-item" to="/"><GoHome/><span className="icon-info">Home</span></Link>
                     </li>
                     <li className="nav-item">
-                        <p style={{cursor: 'pointer'}} onClick={()=>toggle(true)}
+                        <p style={{cursor: 'pointer'}} onClick={()=>[toggle(true),history.push("#create")]}
                         className="nav-item">
                             <IoCreateOutline/><span className="icon-info">Create</span>
                         </p>

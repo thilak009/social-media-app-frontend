@@ -94,7 +94,7 @@ function Chat() {
                         prevoiusMessages.map((message)=>{
                             return(
                                 <li key={message._id} 
-                                 className={`message-item ${user._id === message.author_id?"right":"left"}`}>
+                                 className={`message-item ${user._id === message.author_id?"left":"right"}`}>
                                         {message.message}
                                 </li>
                             ) 
@@ -108,11 +108,11 @@ function Chat() {
         <div className="chat-page">
             <div className="chat-center">
                 <div className="back-btn">
-                <Link to={`/profile/${userId}`}><IoArrowBackSharp style={{fontSize:"20px",color:"#fd6868"}}/></Link>
+                <Link to={`/profile/${userId}`}><IoArrowBackSharp style={{fontSize:"25px",color:"#fd6868"}}/></Link>
                 </div>
                 <p id="is-typing"></p>
                 {!loading && messagesList()}
-                <div style={{width:"100%",display:"flex",justifyContent:"flex-end"}}>
+                <div style={{width:"100%",display:"flex"}}>
                     <form id="msg-form">
                         <input id="msg-input" type="text" placeholder="Message" onChange={handleChange}></input>
                         <button onClick={uploadMessage}>Send</button>
