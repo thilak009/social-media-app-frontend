@@ -51,6 +51,21 @@ export const getUserPosts=(userId)=>{
     .catch(err=>console.log(err))
 }
 
+export const getPost=(postId)=>{
+    const {user,token} = isAuthenticated()
+    return fetch(`${process.env.REACT_APP_BASE_URL}/user/${user._id}/${postId}`,{
+        method:"GET",
+        headers:{
+            "auth-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(res=>{
+        return res.json()
+    })
+    .catch(err=>console.log(err))
+}
+
 export const createPost=(post)=>{
 
     const {user , token} = isAuthenticated()

@@ -8,7 +8,7 @@ import {BiUpvote, BiDownvote} from 'react-icons/bi';
 import {AiOutlineClose} from 'react-icons/ai'
 import { Link } from 'react-router-dom';
 import { upVote, removeUpVote, downVote, removeDownVote, getVoteDetails } from '../user/profile';
-import {useHistory} from 'react-router-dom'
+import {useHistory} from 'react-router-dom';
 
 function CommentModal({post,shown,close}){
 
@@ -100,6 +100,7 @@ function Post({post}) {
     const [votesChanged,setVotesChanged] = useState(false)
 
     useEffect(()=>{
+
         return history.listen(location=>{
             if(history.action === "POP"){
                 toggleModalShown(false)
@@ -131,7 +132,7 @@ function Post({post}) {
         .catch(err=>console.log(err))
     }
     const profileClickable=()=>{
-        if(window.location.pathname === '/'){
+        if(window.location.pathname === "/"){
             return(
                 <Link to={`/profile/${postedBy._id}`}>
                     <img src={profilePicUrl} className="profile-pic" alt="profile pic"/>
@@ -194,11 +195,13 @@ function Post({post}) {
                 </div>
                 <h6>{moment(createdAt).isSame(moment(),'day')?moment(createdAt).fromNow():moment(createdAt).format('MMMM Do YYYY, H:mm')}</h6>
             </div>
-            <div className={`post-info ${description.length > 1000?"post-info-in-modal":""}`} onClick={()=> [togglePostModal(!postModal),history.push('#post')]}
+            <Link to={`/${user._id}/post/${_id}`}>
+            <div className={`post-info ${description.length > 1000?"post-info-in-modal":""}`}
                 style={{cursor:"pointer"}}>
                 <h3 className="post-title">{title}</h3>
                 <p>{description}</p>
             </div>
+            </Link>
             <div className="post-reactions">
                 <div className="votes">
                     <BiUpvote style={{color: upvoted && "#5575e7"}} onClick={checkAndUpvote}/>
@@ -218,11 +221,11 @@ function Post({post}) {
                 shown={modalShown}
                 close={()=>{toggleModalShown(false)}}>
             </CommentModal>
-            <Comments
+            {/* <Comments
             post={post}
             shown={postModal}
             close={()=>togglePostModal(false)}>
-            </Comments>
+            </Comments> */}
         </div>
     )
 }

@@ -3,6 +3,7 @@ import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import { signup } from '../auth';
 import '../CSS/sign.css'
+import { loadingScreen } from './LoadingScreen';
 
 function Signup() {
 
@@ -13,6 +14,7 @@ function Signup() {
         confirmPassword:"",
         redirect:false
     })
+    const [loading,setLoading] = useState(false)
 
     const onSubmit=(e)=>{
 
@@ -26,6 +28,7 @@ function Signup() {
             alert(`password does not match`)
         }
         if(username && email && password === confirmPassword){
+            setLoading(true)
             signup({username,email,password})
             .then(data=>{
                 if(data.error){
@@ -36,6 +39,10 @@ function Signup() {
                     setValues({...values,redirect: true})
                 }
             })
+            setLoading(false)
+        }
+        else{
+            alert("fill in all details")
         }
     }
 
@@ -70,8 +77,7 @@ function Signup() {
     }
     return (
         <div>
-            {signupForm()}
-            {performRedirect()}
+            {loading?loadingScreen("spin"):[signupForm(), performRedirect()]}
         </div>
     )
 }

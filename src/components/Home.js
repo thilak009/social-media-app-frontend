@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { createPost, getAllPosts } from '../user';
+import React, { useContext, useState } from 'react'
+import { createPost } from '../user';
 import Navbar from './Navbar';
 import Post from './Post';
 import '../CSS/home.css';
 import {loadingScreen} from './LoadingScreen';
 import { useHistory } from 'react-router';
+import PostsContext from '../Context';
 
 
-// window.addEventListener('')
 function Modal({ shown, close }) {
     
     const history = useHistory()
@@ -26,7 +26,6 @@ function Modal({ shown, close }) {
         if(title && description){
             createPost({title,description})
             .then(data=>{
-                console.log('post created');
                 alert('post created');
             })
             // document.getElementById('post-modal').style.display='none'
@@ -35,6 +34,9 @@ function Modal({ shown, close }) {
         }
         else{
             document.getElementById('post-error-message').style.display='block'
+            setTimeout(()=>{
+                document.getElementById('post-error-message').style.display='none'
+            },2500)
         }
     }
     return shown ? (
@@ -57,7 +59,7 @@ function Modal({ shown, close }) {
                 <p id="post-error-message">enter all details</p>
                 <input type="text" onChange={handleChange("title")} placeholder="title" />
                 <textarea type="text" onChange={handleChange("description")} placeholder="description" />
-                <div><button type="submit" onClick={onSubmit}>Post</button></div>
+                <div><button type="submit" onClick={onSubmit} style={{fontSize:"18px"}}>Post</button></div>
             </form>
         </div>
       </div>
@@ -66,54 +68,15 @@ function Modal({ shown, close }) {
 
 function Home() {
 
-    const history = useHistory()
+    const {posts,loadMorePosts,loading,extraPostsAvailable} = useContext(PostsContext)
     const [modalShown, toggleModal] = useState(false)
-    const [posts,setPosts] = useState([])
-    const [loading,setLoading] = useState(false)
-    const [lastId,setLastId] = useState('')
-    const [extraPostsAvailable,setExtraPostsAvailable] = useState(true)
-    useEffect(()=>{
-    },[loading])
 
-    useEffect(()=>{
-        getData()
-        return history.listen(location=>{
-            if(history.action === "POP"){
-                toggleModal(false)
-            }
-        })
-    },[])
-
-    const getData=()=>{
-
-        setLoading(true);
-        getAllPosts(lastId)
-        .then(data=>{
-            setPosts([...posts,...data]);
-            setLoading(false);
-            setLastId(data.slice(-1)[0]._id)
-        })
-    }
-    const loadMorePosts=()=>{
-        getAllPosts(lastId)
-        .then(data=>{
-            setPosts([...posts,...data]);
-            if(data.length>0){
-                setLastId(data.slice(-1)[0]._id)
-                setExtraPostsAvailable(true)
-            }
-            else{
-                setExtraPostsAvailable(false)
-            }
-        })
-    }
     const homePage=()=>{
         return(
             <div className="home">
             <div className="navbar-feed">
                 <Navbar toggle={toggleModal}/>
                 <div className="feed">
-                    {/* <button onClick={getData}>get posts</button> */}
                     <div className="posts">
                         <div className="posts-container">
                         {

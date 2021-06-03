@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getUserPosts, getUserProfile } from '../user';
 import Post from './Post';
 import moment from 'moment';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { checkFollow, editProfile, removeFollow, setFollow,updateProfilePhoto, getImagesFromCatalog} from '../user/profile';
 import {AiOutlineEdit} from 'react-icons/ai';
 import {IoArrowBackSharp} from 'react-icons/io5';
@@ -16,6 +16,7 @@ function UserProfile() {
 
     const {user} = isAuthenticated()
     const {userId} = useParams()
+    const history = useHistory()
 
     const [posts,setPosts] = useState([]);
     const [userProfile,setUserProfile] = useState({});
@@ -146,6 +147,9 @@ function UserProfile() {
             return image;
         })
     }
+    const goBack=()=>{
+        history.goBack()
+    }
     //HTML return functions to make code more readable
 
     const userInfo=()=>{
@@ -246,7 +250,7 @@ function UserProfile() {
                             picsLoading?loadingAnimation():profilePicsListToChoose()
                         }
                     </div>
-                    <button onClick={updateImage}>Save Image</button>
+                    <button onClick={updateImage} style={{margin:"5px 0px 8px 0px"}}>Save Image</button>
                 </div>
             )
         }
@@ -271,9 +275,9 @@ function UserProfile() {
         <div className="user-profile-page">
             <div className="user-profile-center">
                 <div className="back-button-container">
-                    <Link to="/" style={{color:"#fd6868"}}>
-                        <span style={{fontSize:"25px",cursor:"pointer"}}><IoArrowBackSharp/></span>
-                    </Link>
+                    <span style={{fontSize:"25px",cursor:"pointer",color:"#fd6868"}} onClick={goBack}>
+                        <IoArrowBackSharp/>
+                    </span>
                 </div>
                 {
                     loading ? loadingScreen():[userInfo(),userUpdateForm(),userPosts()]
