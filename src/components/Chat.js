@@ -25,7 +25,6 @@ function Chat() {
             checkChatRoom(userId)
             .then(data=>{
                 setChatRoom(data)
-                console.log(data);
                 setLoading(false)
             })
         }

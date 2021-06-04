@@ -2,15 +2,14 @@ import React, { useEffect, useRef, useState } from 'react'
 import { createComment, getComments, getPost } from '../user'
 import '../CSS/post.css'
 import { loadingAnimation } from './LoadingScreen'
-import {AiOutlineClose} from 'react-icons/ai'
+import {IoArrowBackSharp} from 'react-icons/io5';
 import moment from 'moment'
-import { Link, useParams } from 'react-router-dom'
-import { isAuthenticated } from '../auth'
+import { Link, useHistory, useParams } from 'react-router-dom'
 
 
 function Comments() {
 
-    const {user} =isAuthenticated()
+    const history = useHistory()
     const {postId} = useParams()
     const [post,setPost] = useState({
         _id:"",
@@ -86,7 +85,9 @@ function Comments() {
         return show ?(
             <div className="comments-page">
                 <div className="comments-container">
-                    
+                    <span style={{fontSize:"25px",cursor:"pointer",color:"#fd6868"}} onClick={()=>history.goBack()}>
+                            <IoArrowBackSharp/>
+                    </span>
                     <div className="post-user-info">
                         <div className="post-user">
                             {

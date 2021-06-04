@@ -207,7 +207,7 @@ function UserProfile() {
                         const url = `${process.env.REACT_APP_BASE_URL}/helper/${image.name}`
                         return(
                             <div key={image.name} onClick={()=> selectImage(image.name)}
-                            id={image.name} className="profile-pic-container">
+                             id={image.name} className="profile-pic-container">
                                 <img src={url}  alt="none" className="profile-pic-image"/>
                             </div>
                         )

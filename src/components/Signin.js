@@ -12,7 +12,8 @@ function Signin() {
     })
     const [loading,setLoading] = useState(false)
 
-    const loginUser=()=>{
+    const onSubmit=(e)=>{
+        e.preventDefault();
         const {email,password}=values;
 
         if(email && password){
@@ -38,15 +39,27 @@ function Signin() {
             alert("please fill in the fields")
         }
     }
-    const onSubmit=(e)=>{
-
+    const guestLogin=(e)=>{
         e.preventDefault();
-        loginUser()
-    }
-    const guestLogin=async(e)=>{
-        e.preventDefault();
-        await setValues({...values,email:"guest@gmail.com",password:"guest123"})
-        loginUser()
+        setLoading(true)
+        const email = "guest@gmail.com"
+        const password = "guest123"
+            signin({email,password})
+            .then(data=>{
+                if(data.error){
+                    setTimeout(()=>{
+                        document.getElementById('error-message').style.display="block"
+                    },900)
+                    setTimeout(()=>{
+                        document.getElementById('error-message').style.display="none"
+                    },3000)
+                }
+                else{
+                    localStorage.setItem("token",JSON.stringify(data))
+                    setValues({...values,redirect: true})
+                }
+                setLoading(false)
+            })
     }
 
     const performRedirect=()=>{

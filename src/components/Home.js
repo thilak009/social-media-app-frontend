@@ -1,11 +1,10 @@
-import React, { useContext, useState } from 'react'
-import { createPost } from '../user';
+import React, { useEffect, useState } from 'react'
+import { createPost, getAllPosts } from '../user';
 import Navbar from './Navbar';
 import Post from './Post';
 import '../CSS/home.css';
 import {loadingScreen} from './LoadingScreen';
 import { useHistory } from 'react-router';
-import PostsContext from '../Context';
 
 
 function Modal({ shown, close }) {
@@ -68,41 +67,72 @@ function Modal({ shown, close }) {
 
 function Home() {
 
-    const {posts,loadMorePosts,loading,extraPostsAvailable} = useContext(PostsContext)
     const [modalShown, toggleModal] = useState(false)
+    const [posts,setPosts] = useState([])
+    const [lastId,setLastId] = useState('')
+    const [loading,setLoading] = useState(false)
+    const [extraPostsAvailable,setExtraPostsAvailable] = useState(true)
+    
+    useEffect(()=>{
+        getData()
+    },[])
+    const getData=()=>{
+  
+        setLoading(true);
+        getAllPosts(lastId)
+        .then(data=>{
+          console.log(data);
+            setPosts(data);
+            setLoading(false);
+            setLastId(data.slice(-1)[0]._id)
+        })
+    }
+    const loadMorePosts=()=>{
+        getAllPosts(lastId)
+        .then(data=>{
+            setPosts([...posts,...data]);
+            if(data.length>0){
+                setLastId(data.slice(-1)[0]._id)
+                setExtraPostsAvailable(true)
+            }
+            else{
+                setExtraPostsAvailable(false)
+            }
+        })
+    }
 
     const homePage=()=>{
         return(
             <div className="home">
-            <div className="navbar-feed">
-                <Navbar toggle={toggleModal}/>
-                <div className="feed">
-                    <div className="posts">
-                        <div className="posts-container">
-                        {
-                            posts.map((post)=>{
-                                return(
-                                    <Post key={post._id} post={post}/>
-                                )
-                            })
-                        }
+                <div className="navbar-feed">
+                    <Navbar toggle={toggleModal}/>
+                    <div className="feed">
+                        <div className="posts">
+                            <div className="posts-container">
+                            {
+                                posts.map((post)=>{
+                                    return(
+                                        <Post key={post._id} post={post}/>
+                                    )
+                                })
+                            }
+                            </div>
                         </div>
+                        <div style={{display:"flex",justifyContent:"center"}}>
+                            {
+                                extraPostsAvailable ?<button onClick={loadMorePosts}>See More Posts</button>:<p>You have reached the end of the road</p>
+                            }
+                        </div>
+                        <Modal
+                            shown={modalShown}
+                            close={() => {
+                            toggleModal(false);
+                            }}
+                        >
+                        </Modal>
                     </div>
-                    <div style={{display:"flex",justifyContent:"center"}}>
-                        {
-                            extraPostsAvailable ?<button onClick={loadMorePosts}>See More Posts</button>:<p>You have reached the end of the road</p>
-                        }
-                    </div>
-                    <Modal
-                        shown={modalShown}
-                        close={() => {
-                        toggleModal(false);
-                        }}
-                    >
-                    </Modal>
                 </div>
             </div>
-        </div>
         )
     }
     return (
