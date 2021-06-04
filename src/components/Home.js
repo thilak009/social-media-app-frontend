@@ -81,7 +81,6 @@ function Home() {
         setLoading(true);
         getAllPosts(lastId)
         .then(data=>{
-          console.log(data);
             setPosts(data);
             setLoading(false);
             setLastId(data.slice(-1)[0]._id)

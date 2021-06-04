@@ -3,7 +3,6 @@ import '../CSS/post.css';
 import moment from 'moment';
 import { createComment, deletePost } from '../user';
 import { isAuthenticated } from '../auth';
-import Comments from './Comments';
 import {BiUpvote, BiDownvote} from 'react-icons/bi';
 import {AiOutlineClose} from 'react-icons/ai'
 import { Link } from 'react-router-dom';
@@ -19,9 +18,6 @@ function CommentModal({post,shown,close}){
     
     const comment=(e)=>{
 
-        //TODO: need to prevent refresh so i think
-        //i have to render comments as a separate route
-        //or a whole new component
         e.preventDefault()
         if(!commentRef.current.value){
             alert('please enter something')
@@ -221,11 +217,6 @@ function Post({post}) {
                 shown={modalShown}
                 close={()=>{toggleModalShown(false)}}>
             </CommentModal>
-            {/* <Comments
-            post={post}
-            shown={postModal}
-            close={()=>togglePostModal(false)}>
-            </Comments> */}
         </div>
     )
 }

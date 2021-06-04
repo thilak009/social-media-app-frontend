@@ -93,7 +93,7 @@ function Chat() {
                         prevoiusMessages.map((message)=>{
                             return(
                                 <li key={message._id} 
-                                 className={`message-item ${user._id === message.author_id?"left":"right"}`}>
+                                 className={`message-item ${user._id === message.author_id?"right":"left"}`}>
                                         {message.message}
                                 </li>
                             ) 
