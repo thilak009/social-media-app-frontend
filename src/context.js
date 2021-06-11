@@ -1,4 +1,5 @@
 import React,{useState,useEffect} from 'react'
+import { isAuthenticated } from './auth'
 import { getAllPosts } from './user'
 
 const PostsContext = React.createContext()
@@ -12,7 +13,9 @@ function PostsProvider({children}){
     const [extraPostsAvailable,setExtraPostsAvailable] = useState(true)
     
     useEffect(()=>{
-        getData()
+        if(isAuthenticated()){
+            getData()
+        }
     },[])
     const getData=()=>{
   
