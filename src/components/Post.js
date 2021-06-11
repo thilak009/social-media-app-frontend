@@ -8,6 +8,7 @@ import {AiOutlineClose} from 'react-icons/ai'
 import { Link } from 'react-router-dom';
 import { upVote, removeUpVote, downVote, removeDownVote, getVoteDetails } from '../user/profile';
 import {useHistory} from 'react-router-dom';
+import {ConfirmDialog} from './Dialog';
 
 function CommentModal({post,shown,close}){
 
@@ -94,6 +95,7 @@ function Post({post}) {
     const [postModal,togglePostModal] = useState(false)
     const [voteDetails,setVoteDetails] = useState({})
     const [votesChanged,setVotesChanged] = useState(false)
+    const [dialog,toggleDialog] = useState(false)
 
     useEffect(()=>{
 
@@ -101,6 +103,7 @@ function Post({post}) {
             if(history.action === "POP"){
                 toggleModalShown(false)
                 togglePostModal(false)
+                toggleDialog(false)
             }
         })
     },[])
@@ -122,7 +125,6 @@ function Post({post}) {
         }
         deletePost(postInfo)
         .then(data=>{
-            console.log('post deleted');
             postRef.current.style.display = 'none';
         })
         .catch(err=>console.log(err))
@@ -207,7 +209,7 @@ function Post({post}) {
                 </div>
                 {
                     (user._id === postedBy._id) && (
-                        <button onClick={removePost}>delete</button>
+                        <button onClick={()=> [toggleDialog(!dialog),history.push("#delete")]}>delete</button>
                     )
                 }
                 <button onClick={()=> [toggleModalShown(!modalShown),history.push('#comment')]}>Comment</button>
@@ -217,6 +219,10 @@ function Post({post}) {
                 shown={modalShown}
                 close={()=>{toggleModalShown(false)}}>
             </CommentModal>
+            {
+                dialog && <ConfirmDialog message="Are you sure you want to delete post"
+                     action={removePost} close={()=> toggleDialog(false)}/>
+            }
         </div>
     )
 }

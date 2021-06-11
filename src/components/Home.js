@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { createPost, getAllPosts } from '../user';
+import { createPost } from '../user';
 import Navbar from './Navbar';
 import Post from './Post';
 import '../CSS/home.css';
@@ -15,6 +15,7 @@ function Modal({ shown, close }) {
         title:"",
         description:""
     })
+    
     const handleChange = name => event =>{
         setPostValues({...postValues, [name]: event.target.value})
     }
@@ -26,9 +27,8 @@ function Modal({ shown, close }) {
         if(title && description){
             createPost({title,description})
             .then(data=>{
-                alert('post created');
+               alert("post created")
             })
-            // document.getElementById('post-modal').style.display='none'
             close()
             history.goBack()
         }
@@ -71,6 +71,7 @@ function Home() {
     const history= useHistory()
     const {posts,loading,extraPostsAvailable,loadMorePosts} = useContext(PostsContext)
     const [modalShown, toggleModal] = useState(false)
+    const [acknowledgeMessage,toggleAcknowledgeMessage] = useState(false)
 
     useEffect(()=>{
         var feed = document.getElementById("feed-scroll")

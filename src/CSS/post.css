@@ -56,7 +56,6 @@ input{
     top: 0;
     left: 0;
     background-color: rgba(0,0,0,0.8);
-    padding-top: 3%;
 }
 .comment-modal{
     margin: 0 auto;
@@ -74,7 +73,6 @@ input{
     background-color: var(--color-primary-600);
 }
 .comments-page{
-    z-index: 1;
     width: 100%;
     height: 100%;
     position: fixed;

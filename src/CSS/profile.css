@@ -38,10 +38,6 @@
     display: flex;
     align-items: center;
 }
-/* .profile-pics-container{
-    display: flex;
-    justify-content: center;
-} */
 .image-update-form{
     display: flex;
     flex-direction: column;
@@ -52,13 +48,11 @@
     margin-bottom: 20px;
 }
 .profile-pics-list{
-    /* width: 40%; */
     display: grid;
     column-gap: 1rem;
     grid-template-columns: repeat(auto-fill,6rem);
 }
 .profile-pic-container{
-    /* padding: 10px; */
     text-align: center;
     width: auto;
 }

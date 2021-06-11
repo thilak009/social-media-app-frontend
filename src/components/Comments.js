@@ -27,12 +27,18 @@ function Comments() {
     const [show,setShow] = useState(false)
     const [loading,setLoading] = useState(false)
     const [reloadComments,setReloadComments]= useState(false)
+    const [postDeleted,setPostDeleted] = useState(false)
     
     useEffect(()=>{
         setLoading(true)
         getPost(postId)
         .then(data=>{
-            setPost(data)
+            if(data){
+                setPost(data)
+            }
+            else{
+                setPostDeleted(true)
+            }
             setLoading(false)
         })
     },[])
@@ -136,9 +142,24 @@ function Comments() {
             </div>
         ):null;
     }
+    const deletedPostContainer=()=>{
+        return (
+            <div className="comments-page">
+                <div className="comments-container">
+                    <span style={{fontSize:"25px",cursor:"pointer",color:"#fd6868"}} onClick={()=>history.goBack()}>
+                            <IoArrowBackSharp/>
+                    </span>
+                    <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"20px"}}>
+                        <p>The post you are looking for is no longer available</p>
+                        <Link to="/"><button>Go to Home</button></Link>
+                    </div>
+                </div>
+            </div>
+        )
+    }
     return (
         <>
-        {loading? loadingAnimation("bubbles") : commentsContainer()}
+        {loading? loadingAnimation("bubbles") : postDeleted?deletedPostContainer():commentsContainer()}
         </>
     )
 }
