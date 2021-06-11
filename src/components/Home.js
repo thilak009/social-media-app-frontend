@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { createPost, getAllPosts } from '../user';
 import Navbar from './Navbar';
 import Post from './Post';
 import '../CSS/home.css';
 import {loadingScreen} from './LoadingScreen';
 import { useHistory } from 'react-router';
+import { PostsContext } from '../context';
 
 
 function Modal({ shown, close }) {
@@ -63,49 +64,34 @@ function Modal({ shown, close }) {
         </div>
       </div>
     ) : null;
-  }
+}
 
 function Home() {
 
+    const history= useHistory()
+    const {posts,loading,extraPostsAvailable,loadMorePosts} = useContext(PostsContext)
     const [modalShown, toggleModal] = useState(false)
-    const [posts,setPosts] = useState([])
-    const [lastId,setLastId] = useState('')
-    const [loading,setLoading] = useState(false)
-    const [extraPostsAvailable,setExtraPostsAvailable] = useState(true)
-    
-    useEffect(()=>{
-        getData()
-    },[])
-    const getData=()=>{
-  
-        setLoading(true);
-        getAllPosts(lastId)
-        .then(data=>{
-            setPosts(data);
-            setLoading(false);
-            setLastId(data.slice(-1)[0]._id)
-        })
-    }
-    const loadMorePosts=()=>{
-        getAllPosts(lastId)
-        .then(data=>{
-            setPosts([...posts,...data]);
-            if(data.length>0){
-                setLastId(data.slice(-1)[0]._id)
-                setExtraPostsAvailable(true)
-            }
-            else{
-                setExtraPostsAvailable(false)
-            }
-        })
-    }
 
+    useEffect(()=>{
+        var feed = document.getElementById("feed-scroll")
+        feed.scrollTop = sessionStorage.getItem("pointer")?sessionStorage.getItem("pointer"):0
+        return history.listen(location=>{
+            if(history.action === "POP"){
+                toggleModal(false)
+            }
+        })
+    },[])
+
+    const handleScroll=(e)=>{
+        let element = e.target
+        sessionStorage.setItem('pointer',element.scrollTop);
+    }
     const homePage=()=>{
         return(
             <div className="home">
                 <div className="navbar-feed">
                     <Navbar toggle={toggleModal}/>
-                    <div className="feed">
+                    <div className="feed" onScroll={handleScroll} id="feed-scroll">
                         <div className="posts">
                             <div className="posts-container">
                             {

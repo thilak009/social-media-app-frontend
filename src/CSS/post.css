@@ -101,11 +101,11 @@ input{
 }
 .actual-comments{
     max-height: 50vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .post-info-in-modal{
     max-height: 30vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 @media only screen and (min-width: 550px){
     .comment-modal{
@@ -121,6 +121,6 @@ input{
         width: 40%;
     }
     .comments-container{
-        width: 50%;
+        width: 40%;
     }
 }

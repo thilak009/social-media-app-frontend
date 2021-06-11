@@ -37,12 +37,10 @@ function Comments() {
         })
     },[])
     useEffect(()=>{
-        setLoading(true)
         getComments(postId)
         .then(data=>{
             setComments(data)
             setShow(true)
-            setLoading(false)
         })
         .catch(err=>console.log(err))
     },[reloadComments])
@@ -59,9 +57,9 @@ function Comments() {
             }
             createComment(details)
             .then(data=>{
-                alert('commented successfully')
                 setReloadComments(!reloadComments)
             })
+            .catch(err=> console.log(err))
         }
     }
     const profileClickable=()=>{
@@ -124,7 +122,7 @@ function Comments() {
                                                     <p style={{fontSize:"13px",color:"grey"}}>@{comment.userId.username}</p>
                                                 </div>
                                             </div>
-                                            <div style={{padding:"5px 5px 0px 5px"}}>
+                                            <div style={{padding:"0px 5px 0px 5px"}}>
                                                 <p style={{fontSize:"15px"}}>{comment.comment}</p>
                                             </div>
                                         </section>

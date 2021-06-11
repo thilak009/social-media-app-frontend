@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useHistory, useParams } from 'react-router-dom'
 import { isAuthenticated } from '../auth'
 import { checkChatRoom, getAllMessages, sendMessage } from '../user/chat'
 import {IoArrowBackSharp} from 'react-icons/io5';
@@ -13,6 +13,7 @@ function Chat() {
 
     const {user} = isAuthenticated()
     const {userId} = useParams()
+    const history = useHistory()
 
     const [chatRoom,setChatRoom] = useState({})
     const [loading,setLoading] = useState(true)
@@ -51,7 +52,6 @@ function Chat() {
             getAllMessages(chatRoom._id)
             .then(data=>{
                 setPreviousMessages(data)
-                console.log(data);
                 var chat = document.getElementById('chat')
                 chat.scrollTop = chat.scrollHeight
             })
@@ -107,7 +107,9 @@ function Chat() {
         <div className="chat-page">
             <div className="chat-center">
                 <div className="back-btn">
-                <Link to={`/profile/${userId}`}><IoArrowBackSharp style={{fontSize:"25px",color:"#fd6868"}}/></Link>
+                <span onClick={()=> history.goBack()} style={{cursor:"pointer"}}>
+                    <IoArrowBackSharp style={{fontSize:"25px",color:"#fd6868"}}/>
+                </span>
                 </div>
                 <p id="is-typing"></p>
                 {!loading && messagesList()}

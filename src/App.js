@@ -9,6 +9,7 @@ import PageNotFound from './components/PageNotFound';
 import Chat from './components/Chat';
 import Comments from './components/Comments';
 import UserCheckRoute from './auth/UserCheckRoute';
+import { PostsProvider } from './context';
 
 
 function App() {
@@ -18,11 +19,15 @@ function App() {
         <Switch>
           <UserCheckRoute exact path='/signin' component={Signin}></UserCheckRoute>
           <UserCheckRoute exact path='/signup' component={Signup}></UserCheckRoute>
-          <PrivateRoute exact path='/' component={Home}></PrivateRoute>
-          <PrivateRoute exact path="/profile/:userId" component={UserProfile}></PrivateRoute>
-          <PrivateRoute exact path="/:userId/chat" component={Chat}></PrivateRoute>
-          <PrivateRoute exact path='/:userId/post/:postId'><Comments/></PrivateRoute>
-          <Route path="*" component={PageNotFound}></Route>
+          <PostsProvider>
+            <Switch>
+              <PrivateRoute exact path='/' component={Home}></PrivateRoute>
+              <PrivateRoute exact path="/profile/:userId" component={UserProfile}></PrivateRoute>
+              <PrivateRoute exact path="/:userId/chat" component={Chat}></PrivateRoute>
+              <PrivateRoute exact path='/:userId/post/:postId' component={Comments}></PrivateRoute>
+              <Route path="*" component={PageNotFound}></Route>
+            </Switch>
+          </PostsProvider>
         </Switch>
       </Router>
   );
