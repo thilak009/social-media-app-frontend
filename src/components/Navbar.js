@@ -54,9 +54,9 @@ function Navbar({toggle}) {
                         <li className="nav-item">
                             <Link className="nav-item" to={`/profile/${user?user._id:""}`}><BsPerson/><span className="icon-info">Profile</span></Link>
                         </li>
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                             <Link className="nav-item" to="/search"><BsSearch/><span className="icon-info">Search</span></Link>
-                        </li>
+                        </li> */}
                         {
                             isAuthenticated() && (
                             <li className="nav-item">

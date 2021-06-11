@@ -26,7 +26,7 @@ function App() {
               <PrivateRoute exact path="/profile/:userId" component={UserProfile}></PrivateRoute>
               <PrivateRoute exact path="/:userId/chat" component={Chat}></PrivateRoute>
               <PrivateRoute exact path='/:userId/post/:postId' component={Comments}></PrivateRoute>
-              <PrivateRoute exact path="/search" component={Search}></PrivateRoute>
+              {/* <PrivateRoute exact path="/search" component={Search}></PrivateRoute> */}
               <Route path="*" component={PageNotFound}></Route>
             </Switch>
           </PostsProvider>
