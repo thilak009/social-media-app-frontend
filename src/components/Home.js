@@ -6,6 +6,8 @@ import '../CSS/home.css';
 import {loadingScreen} from './LoadingScreen';
 import { useHistory } from 'react-router';
 import { PostsContext } from '../context';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function Modal({ shown, close }) {
@@ -27,7 +29,16 @@ function Modal({ shown, close }) {
         if(title && description){
             createPost({title,description})
             .then(data=>{
-               alert("post created")
+               
+               toast.info('Post created', {
+                position: "top-center",
+                autoClose: 1000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: false,
+                progress: undefined,
+                });
             })
             close()
             history.goBack()
@@ -116,6 +127,18 @@ function Home() {
                             }}
                         >
                         </Modal>
+                        <ToastContainer
+                            position="top-center"
+                            autoClose={1000}
+                            hideProgressBar
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable={false}
+                            pauseOnHover
+                            closeButton={false}
+                            />
                     </div>
                 </div>
             </div>

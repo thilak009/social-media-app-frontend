@@ -203,9 +203,9 @@ function Post({post}) {
             <div className="post-reactions">
                 <div className="votes">
                     <BiUpvote style={{color: upvoted && "#5575e7"}} onClick={checkAndUpvote}/>
-                    <p>{upvoteCount}</p>
+                    <p>{upvoteCount?upvoteCount:0}</p>
                     <BiDownvote style={{color: downvoted && "#fd4d4d"}} onClick={checkAndDownvote}/>
-                    <p>{downvoteCount}</p>
+                    <p>{downvoteCount?downvoteCount:0}</p>
                 </div>
                 {
                     (user._id === postedBy._id) && (
