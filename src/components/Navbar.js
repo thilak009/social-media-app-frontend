@@ -12,6 +12,7 @@ import {ReactComponent as LogoutIcon} from "../assets/logout.svg"
 
 import '../CSS/navbar.css'
 import {ConfirmDialog} from './Dialog';
+import { useQueryClient } from 'react-query';
  
 
 function Navbar({toggle}) {
@@ -22,6 +23,8 @@ function Navbar({toggle}) {
     const [redirect,setRedirect] = useState(false);
     const [dialog,toggleDialog] = useState(false)
    
+    const queryClient = useQueryClient()
+
     useEffect(()=>{
         return history.listen(location=>{
             if(history.action === "POP"){
@@ -48,7 +51,11 @@ function Navbar({toggle}) {
                 <div className="navbar">
                     <ul>
                         <li className="nav-item">
-                            <Link className="nav-item" to="/"><HomeIcon/><span className="icon-info">Home</span></Link>
+                            <Link className="nav-item" to="/"
+                                onClick={()=> queryClient.invalidateQueries("posts")}
+                            >
+                                <HomeIcon/><span className="icon-info">Home</span>
+                            </Link>
                         </li>
                         <li className="nav-item">
                             <p style={{cursor: 'pointer'}} onClick={()=>[toggle(true),history.push("#create")]}

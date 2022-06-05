@@ -87,7 +87,7 @@
     margin: 0 auto;
 }
 .dialog-modal{
-    background-color: var(--color-primary-600);
+    /* background-color: var(--color-primary-600); */
     margin: auto;
     border-radius: 5px;
     display: flex;
