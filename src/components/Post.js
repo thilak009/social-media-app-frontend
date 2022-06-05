@@ -175,7 +175,7 @@ function Post({post}) {
         }
         deletePost(postInfo)
         .then(data=>{
-            queryClient.invalidateQueries(["posts",user._id])
+            queryClient.invalidateQueries("posts")
             postRef.current.style.display = 'none';
         })
         .catch(err=>console.log(err))
