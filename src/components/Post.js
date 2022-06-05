@@ -247,14 +247,14 @@ function Post({post}) {
                                 }
                                 <div>
                                     <h4>{postedBy.fullname}</h4>
-                                    <p style={{color:"grey"}}>@{postedBy.username}</p>
+                                    {/* <p style={{color:"grey"}}>@{postedBy.username}</p> */}
                                 </div>
                             </Element>
                             <Element as="div">
                                 <h6>{moment(createdAt).isSame(moment(),'day')?moment(createdAt).fromNow():moment(createdAt).format('MMMM Do YYYY, H:mm')}</h6>
                             </Element>
                         </Element>
-                        <HRule kind="primary" marginTop="none" marginBottom="none"/>
+                        <HRule kind="primary" marginTop="nano" marginBottom="none"/>
                     </Portion>
                     <Portion>
                         <Link to={`/${user._id}/post/${_id}`}>

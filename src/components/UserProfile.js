@@ -253,7 +253,7 @@ function UserProfile() {
                         <p>Joined on : {moment(userProfile.date).format('MMMM YYYY')}</p>
                     </div>
                     {
-                        userProfile.role==="Admin" && (
+                        user._id===userProfile._id && userProfile.role==="Admin" && (
                             <Element as="div" marginTop='nano'>
                                 <Button
                                     kind='primary'
@@ -362,7 +362,7 @@ function UserProfile() {
                                             <Button kind="primary" size="small"
                                                 disabled={!currentPassword || !newPassword}
                                             >
-                                                Update user
+                                                Update password
                                             </Button>
                                             <Button
                                                 kind="secondary"

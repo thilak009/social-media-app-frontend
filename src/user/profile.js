@@ -188,7 +188,7 @@ export const removeDownVote=(postId)=>{
 }
 
 export const uploadAndRegisterUsers=(formData)=>{
-    const {user,token} = isAuthenticated();
+    const {token} = isAuthenticated();
     return fetch(`${process.env.REACT_APP_BASE_URL}/user/upload`,{
         method:"POST",
         headers:{
