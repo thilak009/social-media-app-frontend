@@ -23,11 +23,11 @@
     border-radius: 50%;
     margin-right: 4px;
 }
-.post-info{
+/* .post-info{
     color: #fff;
     padding: 0.5rem 0.8rem;
     border-bottom: 1px solid var(--color-primary-600);
-}
+} */
 .post-title{
     margin-bottom: 2px;
 }

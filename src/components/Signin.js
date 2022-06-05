@@ -1,3 +1,4 @@
+import { Button, Card, Element, FormWrapper, Heading, InputField, Portion, Row } from 'fictoan-react';
 import React,{useState} from 'react'
 import { Link, Redirect } from 'react-router-dom';
 import { signin } from '../auth';
@@ -77,19 +78,63 @@ function Signin() {
 
     const loginForm=()=>{
         return(
-            <div className="custom-form">
-                <form className="signin-login-form">
-                    <h3>Login</h3>
-                    <p id="error-message" style={{display:"none",marginBottom:"10px",color:"#fd4d4d"}}>Email or password is wrong</p>
-                    <input type="email" onChange={handleChange("email")} placeholder="Email" />
-                    <input type="password" onChange={handleChange("password")} placeholder="Password" />
-                    <div><button type="submit" onClick={onSubmit} style={{fontSize:"18px",marginBottom:"5px"}}>Login</button></div>
-                    <div><button type="submit" onClick={guestLogin} style={{fontSize:"18px"}}>Login as Guest</button></div>
-                    <div className="redirect" style={{fontSize:"18px"}}>
-                        <p>Not a registerd User ?<Link className="link" to="/signup">Signup</Link></p>
-                    </div>
-                </form>
-            </div>
+            // <div className="custom-form">
+                <Row sidePadding="huge">
+                    <Portion>
+                        <Card
+                            shape="rounded"
+                            padding="micro"
+                            marginTop="medium"
+                        >
+                            {/* <form className="signin-login-form"> */}
+                            <FormWrapper>
+                                <Row sidePadding="huge">
+                                    <Portion>
+                                        <Heading as="h3" marginBottom="micro">
+                                            Login
+                                        </Heading>
+                                        <p id="error-message" style={{display:"none",marginBottom:"10px",color:"#fd4d4d"}}>Email or password is wrong</p>
+                                        <InputField
+                                            label="Email"
+                                            placeholder="email"
+                                            onChange={handleChange("email")}
+                                        />
+                                        <InputField
+                                            label="Password"
+                                            type="password"
+                                            placeholder="password"
+                                            onChange={handleChange("password")}
+                                        />
+                                        {/* <input type="email" onChange={handleChange("email")} placeholder="Email" /> */}
+                                        {/* <input type="password" onChange={handleChange("password")} placeholder="Password" /> */}
+                                        <Element as="div" className="vertically-center-items" marginTop='micro' marginBottom='micro'>
+                                            <Button
+                                                kind="primary"
+                                                onClick={onSubmit}
+                                                disabled={!values.email || !values.password}
+                                            >
+                                                Login
+                                            </Button>
+                                            {/* <Button
+                                                kind="primary"
+                                                onClick={guestLogin}
+                                                marginLeft="micro"
+                                            >
+                                                Login as Guest
+                                            </Button> */}
+                                        </Element>
+                                        {/* <div><button type="submit" onClick={onSubmit} style={{fontSize:"18px",marginBottom:"5px"}}>Login</button></div> */}
+                                        {/* <div><button type="submit" onClick={guestLogin} style={{fontSize:"18px"}}>Login as Guest</button></div> */}
+                                        {/* <div className="redirect" style={{fontSize:"18px"}}> */}
+                                            <p>Not a registerd User ? <Element as="span" textColour='blue-80'><Link to="/signup">Signup</Link></Element></p>
+                                        {/* </div> */}
+                                    </Portion>
+                                </Row>
+                            </FormWrapper>
+                        </Card>
+                    </Portion>
+                </Row>
+            // </div>
         )
     }
     return (

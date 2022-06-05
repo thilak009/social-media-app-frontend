@@ -8,6 +8,7 @@ import { useHistory } from 'react-router';
 import { PostsContext } from '../context';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Button, Card, FormWrapper, Heading, InputField, Portion, Row, TextArea } from 'fictoan-react';
 
 
 function Modal({ shown, close }) {
@@ -65,13 +66,34 @@ function Modal({ shown, close }) {
             e.stopPropagation();
           }}
         >
-            <form>
-                <h3>Create a post</h3>
-                <p id="post-error-message">enter all details</p>
-                <input type="text" onChange={handleChange("title")} placeholder="title" />
-                <textarea type="text" onChange={handleChange("description")} placeholder="description" />
-                <div><button type="submit" onClick={onSubmit} style={{fontSize:"18px"}}>Post</button></div>
-            </form>
+            <Card
+                shape="rounded"
+                padding="micro"
+            >
+                <FormWrapper>
+                    <Heading as="h3" marginBottom="micro">Create a post</Heading>
+                    <p id="post-error-message">enter all details</p>
+                    <InputField
+                        label="Question summary"
+                        placeholder="short summary of the question"
+                        onChange={handleChange("title")}
+                    />
+                    <TextArea
+                        label="Description"
+                        placeholder="Elaborate on the question"
+                        onChange={handleChange("description")}
+                    />
+                    <Button
+                        kind="primary"
+                        type="submit" onClick={onSubmit}
+                    >
+                        Post
+                    </Button>
+                    {/* <input type="text" onChange={handleChange("title")} placeholder="title" /> */}
+                    {/* <textarea type="text" onChange={handleChange("description")} placeholder="description" /> */}
+                    {/* <div><button type="submit" onClick={onSubmit} style={{fontSize:"18px"}}>Post</button></div> */}
+                </FormWrapper>
+            </Card>
         </div>
       </div>
     ) : null;
@@ -100,53 +122,70 @@ function Home() {
     }
     const homePage=()=>{
         return(
-            <div className="home">
-                <div className="navbar-feed">
-                    <Navbar toggle={toggleModal}/>
-                    <div className="feed" onScroll={handleScroll} id="feed-scroll">
-                        <div className="posts">
-                            <div className="posts-container">
-                            {
-                                posts.map((post)=>{
-                                    return(
-                                        <Post key={post._id} post={post}/>
+            // <div className="home">
+            <Row sidePadding="huge">
+                <Portion>
+                    {/* <div className="navbar-feed"> */}
+                        <Navbar toggle={toggleModal}/>
+                        <div className="feed" onScroll={handleScroll} id="feed-scroll">
+                            {/* <div className="posts"> */}
+                                {/* <div className="posts-container"> */}
+                                {
+                                    posts.map((post)=>{
+                                        return(
+                                            <Post key={post._id} post={post}/>
+                                        )
+                                    })
+                                }
+                                {/* </div> */}
+                            {/* </div> */}
+                            <div style={{display:"flex",justifyContent:"center"}}>
+                                {
+
+                                    extraPostsAvailable ?(
+                                        <Button
+                                            kind="primary"
+                                            size="small"
+                                            onClick={loadMorePosts}
+                                        >
+                                            See more posts
+                                        </Button>
                                     )
-                                })
-                            }
+                                    // <button onClick={loadMorePosts}>See More Posts</button>
+                                    :
+                                    <p>No more posts to fetch</p>
+                                }
                             </div>
+                            <Modal
+                                shown={modalShown}
+                                close={() => {
+                                toggleModal(false);
+                                }}
+                            >
+                            </Modal>
+                            <ToastContainer
+                                position="top-center"
+                                autoClose={1000}
+                                hideProgressBar
+                                newestOnTop={false}
+                                closeOnClick
+                                rtl={false}
+                                pauseOnFocusLoss
+                                draggable={false}
+                                pauseOnHover
+                                closeButton={false}
+                                />
                         </div>
-                        <div style={{display:"flex",justifyContent:"center"}}>
-                            {
-                                extraPostsAvailable ?<button onClick={loadMorePosts}>See More Posts</button>:<p>You have reached the end of the road</p>
-                            }
-                        </div>
-                        <Modal
-                            shown={modalShown}
-                            close={() => {
-                            toggleModal(false);
-                            }}
-                        >
-                        </Modal>
-                        <ToastContainer
-                            position="top-center"
-                            autoClose={1000}
-                            hideProgressBar
-                            newestOnTop={false}
-                            closeOnClick
-                            rtl={false}
-                            pauseOnFocusLoss
-                            draggable={false}
-                            pauseOnHover
-                            closeButton={false}
-                            />
-                    </div>
-                </div>
-            </div>
+                    {/* </div> */}
+                </Portion>
+            </Row>
+            // </div>
         )
     }
     return (
         <>
-        {loading?loadingScreen():homePage()}
+        {/* {loading?loadingScreen():homePage()} */}
+        {homePage()}
         </>
     )
 }

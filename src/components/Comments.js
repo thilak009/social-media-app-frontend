@@ -5,6 +5,7 @@ import { loadingAnimation } from './LoadingScreen'
 import {IoArrowBackSharp} from 'react-icons/io5';
 import moment from 'moment'
 import { Link, useHistory, useParams } from 'react-router-dom'
+import { Button, Element, Portion, Row, TextArea } from 'fictoan-react';
 
 
 function Comments() {
@@ -87,8 +88,117 @@ function Comments() {
 
     const commentsContainer=()=>{
         return show ?(
-            <div className="comments-page">
-                <div className="comments-container">
+            <>
+            {/* <div className="comments-page"> */}
+                <Row sidePadding="huge">
+                    <Portion>
+                        <span style={{fontSize:"25px",cursor:"pointer",color:"#fd6868"}} onClick={()=>history.goBack()}>
+                            <IoArrowBackSharp/>
+                        </span>
+                        <div className="post-user-info">
+                            <div className="post-user">
+                                {
+                                    profileClickable()
+                                }
+                                <div>
+                                    <h4>{post.postedBy.fullname}</h4>
+                                    <p style={{color:"grey"}}>@{post.postedBy.username}</p>
+                                </div>
+                            </div>
+                            <h6>{moment(post.createdAt).format('MMMM Do YYYY, H:mm')}</h6>
+                        </div>
+                        <div className="post-info post-info-in-modal">
+                            <h3 className="post-title">{post.title}</h3>
+                            <p>{post.description}</p>
+                        </div>
+                        
+                        <form>
+                            <Element as="div" className='vertically-center-items push-to-ends' marginTop='nano' marginBottom='micro'>
+                                <TextArea
+                                    ref={commentRef}
+                                    placeholder="Reply"
+                                />
+                                <Button
+                                    kind="secondary"
+                                    size="small"
+                                    marginLeft="micro"
+                                    onClick={comment}
+                                >
+                                    Comment
+                                </Button>
+                            </Element>
+                            {/* <input ref={commentRef} type="text" placeholder="comment"/>
+                            <button onClick={comment}>Comment</button> */}
+                        </form>
+                        <Element as="div" marginLeft='nano'>
+                            {   
+                                show && (
+                                    comments.map((comment)=>{
+                                        return(
+                                            <div key={comment._id}>
+                                                <Element as="section">
+                                                    <div style={{display:"flex",gap:"3px"}}>
+                                                        <Link to={`/profile/${comment.userId._id}`}>      
+                                                            <img src={`${process.env.REACT_APP_BASE_URL}/user/profile/${comment.userId._id}/photo`} className="comment-profile-pic"/>
+                                                        </Link>
+                                                        <div>
+                                                            <p style={{fontSize:"15px"}}>{comment.userId.fullname}</p>
+                                                            <p style={{fontSize:"13px",color:"grey"}}>@{comment.userId.username}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div style={{padding:"0px 5px 0px 5px"}}>
+                                                        <p style={{fontSize:"15px"}}>{comment.comment}</p>
+                                                    </div>
+                                                </Element>
+                                                {/* <section className="comment-info">
+                                                    <div style={{display:"flex",gap:"3px"}}>
+                                                        <Link to={`/profile/${comment.userId._id}`}>      
+                                                            <img src={`${process.env.REACT_APP_BASE_URL}/user/profile/${comment.userId._id}/photo`} className="comment-profile-pic"/>
+                                                        </Link>
+                                                        <div>
+                                                            <p style={{fontSize:"15px"}}>{comment.userId.fullname}</p>
+                                                            <p style={{fontSize:"13px",color:"grey"}}>@{comment.userId.username}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div style={{padding:"0px 5px 0px 5px"}}>
+                                                        <p style={{fontSize:"15px"}}>{comment.comment}</p>
+                                                    </div>
+                                                </section> */}
+                                            </div>
+                                        )
+                                    })
+                                )
+                            }
+                        </Element>
+                        {/* <div className="actual-comments">
+                            {   
+                            show && (
+                                comments.map((comment)=>{
+                                    return(
+                                        <div key={comment._id}>
+                                            <section className="comment-info">
+                                                <div style={{display:"flex",gap:"3px"}}>
+                                                    <Link to={`/profile/${comment.userId._id}`}>      
+                                                        <img src={`${process.env.REACT_APP_BASE_URL}/user/profile/${comment.userId._id}/photo`} className="comment-profile-pic"/>
+                                                    </Link>
+                                                    <div>
+                                                        <p style={{fontSize:"15px"}}>{comment.userId.fullname}</p>
+                                                        <p style={{fontSize:"13px",color:"grey"}}>@{comment.userId.username}</p>
+                                                    </div>
+                                                </div>
+                                                <div style={{padding:"0px 5px 0px 5px"}}>
+                                                    <p style={{fontSize:"15px"}}>{comment.comment}</p>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    )
+                                })
+                            )
+                            }
+                        </div> */}
+                    </Portion>
+                </Row>
+                {/* <div className="comments-container">
                     <span style={{fontSize:"25px",cursor:"pointer",color:"#fd6868"}} onClick={()=>history.goBack()}>
                             <IoArrowBackSharp/>
                     </span>
@@ -138,8 +248,9 @@ function Comments() {
                         )
                         }
                     </div>
-                </div>
-            </div>
+                </div> */}
+            {/* </div> */}
+            </>
         ):null;
     }
     const deletedPostContainer=()=>{

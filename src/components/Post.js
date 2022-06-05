@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { upVote, removeUpVote, downVote, removeDownVote, getVoteDetails } from '../user/profile';
 import {useHistory} from 'react-router-dom';
 import {ConfirmDialog} from './Dialog';
+import { Button, Card, Element, HRule, Portion, Row, TextArea } from 'fictoan-react';
 
 function CommentModal({post,shown,close}){
 
@@ -54,7 +55,53 @@ function CommentModal({post,shown,close}){
     const profilePicUrl = user ? `${process.env.REACT_APP_BASE_URL}/user/profile/${postedBy._id}/photo` : ''
     return shown ? (
         <div className="modal-backdrop" onClick={()=>[close(),history.goBack()]}>
-            <div className="comment-modal" onClick={e=>{e.stopPropagation()}}>
+            <Row sidePadding="huge">
+                <Portion>
+                    <Element as="div" onClick={e=>{e.stopPropagation()}}>
+                        <Card
+                            shape="rounded"
+                            padding="micro"
+                        >
+                            {/* <AiOutlineClose style={{fontSize:"22px",backgroundColor:"black",cursor:"pointer"}} onClick={()=>[close(),history.goBack()]}/> */}
+                            <div className="post-user-info">
+                                <div className="post-user">
+                                    {
+                                        profileClickable()
+                                    }
+                                    <div>
+                                        <h4>{postedBy.fullname}</h4>
+                                        <p style={{color:"grey"}}>@{postedBy.username}</p>
+                                    </div>
+                                </div>
+                                <h6>{moment(createdAt).format('MMMM Do YYYY, H:mm')}</h6>
+                            </div>
+                            <div className="post-info post-info-in-modal">
+                                <h3 className="post-title">{title}</h3>
+                                <p>{description}</p>
+                            </div>
+                            {/* <div style={{display:"block",padding:"5px"}}> */}
+                                <Element as="div" className='vertically-center-items push-to-ends' marginTop='nano'>
+                                    <TextArea
+                                        ref={commentRef}
+                                        placeholder="Reply"
+                                    />
+                                    <Button
+                                        kind="secondary"
+                                        size="small"
+                                        marginLeft="micro"
+                                        onClick={comment}
+                                    >
+                                        Comment
+                                    </Button>
+                                    {/* <textarea ref={commentRef} type="text" placeholder="Reply"></textarea> */}
+                                    {/* <button onClick={comment}>comment</button> */}
+                                </Element>
+                            {/* </div> */}
+                        </Card>
+                    </Element>
+                </Portion>
+            </Row>
+            {/* <div className="comment-modal" onClick={e=>{e.stopPropagation()}}>
                 <div style={{padding:"5px"}}>
                     <AiOutlineClose style={{fontSize:"22px",cursor:"pointer"}} onClick={()=>[close(),history.goBack()]}/>
                 </div>
@@ -78,7 +125,7 @@ function CommentModal({post,shown,close}){
                     <textarea id="comment-teaxtarea" ref={commentRef} type="text" placeholder="Reply"></textarea>
                     <button onClick={comment}>comment</button>
                 </div>
-            </div>
+            </div> */}
         </div>
     ) :null;
 }
@@ -180,8 +227,78 @@ function Post({post}) {
     const profilePicUrl = user ? `${process.env.REACT_APP_BASE_URL}/user/profile/${postedBy._id}/photo` : ''
     
     return (
-        <div className="single-post-container" ref={postRef}>
-            <div className="post-user-info">
+        // <div className="single-post-container" ref={postRef}>
+        <>
+            <Card
+                shape="rounded"
+                padding="nano"
+                marginBottom="nano"
+            >
+                <Row marginBottom="none" gutters="micro">
+                    <Portion>
+                        <Element as="div" className='vertically-center-items push-to-ends'>
+                            <Element as="div" className='vertically-center-items'>
+                                {
+                                    profileClickable()
+                                }
+                                <div>
+                                    <h4>{postedBy.fullname}</h4>
+                                    <p style={{color:"grey"}}>@{postedBy.username}</p>
+                                </div>
+                            </Element>
+                            <Element as="div">
+                                <h6>{moment(createdAt).isSame(moment(),'day')?moment(createdAt).fromNow():moment(createdAt).format('MMMM Do YYYY, H:mm')}</h6>
+                            </Element>
+                        </Element>
+                        <HRule kind="primary" marginTop="none" marginBottom="none"/>
+                    </Portion>
+                    <Portion>
+                        <Link to={`/${user._id}/post/${_id}`}>
+                            <div className={`post-info ${description.length > 1000?"post-info-in-modal":""}`}
+                                style={{cursor:"pointer"}}>
+                                <h3 className="post-title">{title}</h3>
+                                <p>{description}</p>
+                            </div>
+                        </Link>
+                        <HRule kind="primary" marginTop="nano" marginBottom="none"/>
+                    </Portion>
+                    <Portion>
+                        {/* <div className="post-reactions"> */}
+                        <Element as="div" className='vertically-center-items push-to-ends'>
+                            <Element as="div" className='vertically-center-items'>
+                                <BiUpvote style={{color: upvoted && "#5575e7"}} className="is-clickable" onClick={checkAndUpvote}/>
+                                <p>{upvoteCount?upvoteCount:0}</p>
+                                <BiDownvote style={{color: downvoted && "#fd4d4d"}} className="is-clickable" onClick={checkAndDownvote}/>
+                                <p>{downvoteCount?downvoteCount:0}</p>
+                            </Element>
+                            {
+                                (user._id === postedBy._id) && (
+                                    <Button
+                                        bgColour="red-30"
+                                        borderColour="red-90"
+                                        textColour="red"
+                                        size="small"
+                                        onClick={()=> [toggleDialog(!dialog),history.push("#delete")]}
+                                    >
+                                        Delete
+                                    </Button>
+                                    // <button onClick={()=> [toggleDialog(!dialog),history.push("#delete")]}>delete</button>
+                                )
+                            }
+                            <Button
+                                kind="secondary"
+                                size="small"
+                                onClick={()=> [toggleModalShown(!modalShown),history.push('#comment')]}
+                            >
+                                Comment
+                            </Button>
+                            {/* <button onClick={()=> [toggleModalShown(!modalShown),history.push('#comment')]}>Comment</button> */}
+                        </Element>
+                        {/* </div> */}
+                    </Portion>
+                </Row>
+            </Card>
+            {/* <div className="post-user-info">
                 <div className="post-user">
                     {
                         profileClickable()
@@ -213,7 +330,7 @@ function Post({post}) {
                     )
                 }
                 <button onClick={()=> [toggleModalShown(!modalShown),history.push('#comment')]}>Comment</button>
-            </div>
+            </div> */}
             <CommentModal 
                 post={post}
                 shown={modalShown}
@@ -223,7 +340,8 @@ function Post({post}) {
                 dialog && <ConfirmDialog message="Are you sure you want to delete post"
                      action={removePost} close={()=> toggleDialog(false)}/>
             }
-        </div>
+        </>
+        // </div>
     )
 }
 

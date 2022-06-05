@@ -10,6 +10,7 @@ import {AiOutlineMessage} from 'react-icons/ai'
 import { isAuthenticated } from '../auth';
 import '../CSS/profile.css';
 import {loadingAnimation, loadingScreen} from './LoadingScreen';
+import { Button, Card, Element, FormWrapper, InputField, Portion, Row } from 'fictoan-react';
 
 
 function UserProfile() {
@@ -218,7 +219,51 @@ function UserProfile() {
         if(userId === user._id && showForm){
             return(
                 <div className="user-update-options">
-                    <form className="image-update-form">
+                    <Card
+                        shape="rounded"
+                        padding="micro"
+                        marginBottom="micro"
+                    >
+                        <FormWrapper>
+                            <InputField
+                                label="Fullname"
+                                onChange={handleChange("fullname")}
+                                defaultValue={userProfile.fullname}
+                            />
+                            <InputField
+                                label="Bio"
+                                placeholder="short bio about yourself"
+                                onChange={handleChange("bio")}
+                                defaultValue={userProfile.bio}
+                            />
+                            <InputField
+                                type="file"
+                                label="Choose Image form your device"
+                                onChange={handleChange("photo")}
+                            />
+                            <Element as="div" className="vertically-center-items">
+                                <Button kind="primary" size="small" onClick={onSubmit}>
+                                    Update user
+                                </Button>
+                                <Button
+                                    kind="secondary"
+                                    size="small"
+                                    marginLeft="micro"
+                                    onClick={()=> setShowForm(false)}
+                                >
+                                    Cancel
+                                </Button>
+                            </Element>
+                            {/* <div className="profile-pics-container">
+                                <p>Or choose from our amazing Catalog:</p><br/>
+                                {
+                                    picsLoading?loadingAnimation():profilePicsListToChoose()
+                                }
+                            </div>
+                            <button onClick={updateImage} style={{margin:"5px 0px 8px 0px"}}>Save Image</button> */}
+                        </FormWrapper>
+                    </Card>
+                    {/* <form className="image-update-form">
                         <div>
                             <label>Fullname :  </label><br/>
                             <input type="text" onChange={handleChange("fullname")} placeholder="Fullname" defaultValue={userProfile.fullname}
@@ -247,7 +292,7 @@ function UserProfile() {
                             picsLoading?loadingAnimation():profilePicsListToChoose()
                         }
                     </div>
-                    <button onClick={updateImage} style={{margin:"5px 0px 8px 0px"}}>Save Image</button>
+                    <button onClick={updateImage} style={{margin:"5px 0px 8px 0px"}}>Save Image</button> */}
                 </div>
             )
         }
@@ -269,18 +314,32 @@ function UserProfile() {
     }
 
     return (
-        <div className="user-profile-page">
-            <div className="user-profile-center">
-                <div className="back-button-container">
+        <>
+            <Row sidePadding="huge">
+                <Portion>
+                    <div className="back-button-container">
                         <span style={{fontSize:"25px",cursor:"pointer",color:"#fd6868"}} onClick={()=>history.goBack()}>
                             <IoArrowBackSharp/>
                         </span>
+                    </div>
+                    {
+                        loading ? loadingScreen():[userInfo(),userUpdateForm(),userPosts()]
+                    }
+                </Portion>
+            </Row>
+            {/* <div className="user-profile-page">
+                <div className="user-profile-center">
+                    <div className="back-button-container">
+                            <span style={{fontSize:"25px",cursor:"pointer",color:"#fd6868"}} onClick={()=>history.goBack()}>
+                                <IoArrowBackSharp/>
+                            </span>
+                    </div>
+                    {
+                        loading ? loadingScreen():[userInfo(),userUpdateForm(),userPosts()]
+                    }
                 </div>
-                {
-                    loading ? loadingScreen():[userInfo(),userUpdateForm(),userPosts()]
-                }
-            </div>
-        </div>
+            </div> */}
+        </>
     )
 }
 

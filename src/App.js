@@ -11,27 +11,35 @@ import Comments from './components/Comments';
 import UserCheckRoute from './auth/UserCheckRoute';
 import { PostsProvider } from './context';
 import Search from './components/Search';
+import { SetuLightTheme } from './Light.theme';
+import { ThemeProvider } from 'fictoan-react';
+import { GlobalLightStyles } from './Global.light.styled';
 
 
 function App() {
 
   return (
-      <Router>
-        <Switch>
-          <UserCheckRoute exact path='/signin' component={Signin}></UserCheckRoute>
-          <UserCheckRoute exact path='/signup' component={Signup}></UserCheckRoute>
-          <PostsProvider>
+    <>
+      <ThemeProvider theme={SetuLightTheme}>
+          <GlobalLightStyles/>
+          <Router>
             <Switch>
-              <PrivateRoute exact path='/' component={Home}></PrivateRoute>
-              <PrivateRoute exact path="/profile/:userId" component={UserProfile}></PrivateRoute>
-              <PrivateRoute exact path="/:userId/chat" component={Chat}></PrivateRoute>
-              <PrivateRoute exact path='/:userId/post/:postId' component={Comments}></PrivateRoute>
-              {/* <PrivateRoute exact path="/search" component={Search}></PrivateRoute> */}
-              <Route path="*" component={PageNotFound}></Route>
+              <UserCheckRoute exact path='/signin' component={Signin}></UserCheckRoute>
+              <UserCheckRoute exact path='/signup' component={Signup}></UserCheckRoute>
+              <PostsProvider>
+                <Switch>
+                  <PrivateRoute exact path='/' component={Home}></PrivateRoute>
+                  <PrivateRoute exact path="/profile/:userId" component={UserProfile}></PrivateRoute>
+                  <PrivateRoute exact path="/:userId/chat" component={Chat}></PrivateRoute>
+                  <PrivateRoute exact path='/:userId/post/:postId' component={Comments}></PrivateRoute>
+                  {/* <PrivateRoute exact path="/search" component={Search}></PrivateRoute> */}
+                  <Route path="*" component={PageNotFound}></Route>
+                </Switch>
+              </PostsProvider>
             </Switch>
-          </PostsProvider>
-        </Switch>
-      </Router>
+          </Router>
+      </ThemeProvider>
+    </>
   );
 }
 
