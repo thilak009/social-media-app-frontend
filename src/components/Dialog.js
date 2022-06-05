@@ -18,7 +18,7 @@ const ConfirmDialog=({message,action,close})=>{
                     <div>
                         <Text marginBottom='micro'>{message}</Text>
                         {/* <div style={{display:"flex",gap:"20px"}}> */}
-                        <Element as="div" className='vertically-center-items'>
+                        <Element as="div" className='vertically-center-items' style={{justifyContent:"center"}}>
                             <Button
                                 shape='rounded'
                                 size='small'
