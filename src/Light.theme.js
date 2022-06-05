@@ -1,6 +1,6 @@
 import { defaultColours } from "fictoan-react";
 import { darken, lighten, transparentize } from "polished";
-import { DefaultTheme as BridgeThemeType } from "styled-components";
+// import { DefaultTheme as BridgeThemeType } from "styled-components";
 // import { setuColours } from "./Global.light.styled";
 
 // import { setuColours } from "./SetuColours";

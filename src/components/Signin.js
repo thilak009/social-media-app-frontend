@@ -88,12 +88,14 @@ function Signin() {
                         >
                             {/* <form className="signin-login-form"> */}
                             <FormWrapper>
-                                <Row sidePadding="huge">
-                                    <Portion>
+                                <Row>
+                                    <Portion desktopSpan='half'>
                                         <Heading as="h3" marginBottom="micro">
                                             Login
                                         </Heading>
                                         <p id="error-message" style={{display:"none",marginBottom:"10px",color:"#fd4d4d"}}>Email or password is wrong</p>
+                                    </Portion>
+                                    <Portion desktopSpan='half'>
                                         <InputField
                                             label="Email"
                                             placeholder="email"
@@ -126,7 +128,7 @@ function Signin() {
                                         {/* <div><button type="submit" onClick={onSubmit} style={{fontSize:"18px",marginBottom:"5px"}}>Login</button></div> */}
                                         {/* <div><button type="submit" onClick={guestLogin} style={{fontSize:"18px"}}>Login as Guest</button></div> */}
                                         {/* <div className="redirect" style={{fontSize:"18px"}}> */}
-                                            <p>Not a registerd User ? <Element as="span" textColour='blue-80'><Link to="/signup">Signup</Link></Element></p>
+                                            {/* <p>Not a registerd User ? <Element as="span" textColour='blue-80'><Link to="/signup">Signup</Link></Element></p> */}
                                         {/* </div> */}
                                     </Portion>
                                 </Row>

@@ -186,3 +186,39 @@ export const removeDownVote=(postId)=>{
     })
     .catch(err=>console.log(err))
 }
+
+export const uploadAndRegisterUsers=(formData)=>{
+    const {user,token} = isAuthenticated();
+    return fetch(`${process.env.REACT_APP_BASE_URL}/user/upload`,{
+        method:"POST",
+        headers:{
+            "auth-token": token,
+            // "Content-Type": "multipart/form-data"
+        },
+        body: formData
+    })
+    .then(response=>{
+        return response.json()
+    })
+    .catch(err=>console.log(err))
+}
+
+export const updatePassword=(data)=>{
+    const {user,token} = isAuthenticated();
+    const {currentPassword,newPassword} = data
+    return fetch(`${process.env.REACT_APP_BASE_URL}/user/${user._id}/profile/changePassword`,{
+        method:"POST",
+        headers:{
+            "auth-token": token,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            current_password: currentPassword,
+            new_password: newPassword
+        })
+    })
+    .then(response=>{
+        return response.json()
+    })
+    .catch(err=>console.log(err))
+}

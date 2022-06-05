@@ -27,6 +27,16 @@ function PostsProvider({children}){
             setLastId(data.slice(-1)[0]._id)
         })
     }
+    const refreshPosts=()=>{
+  
+        setLoading(true);
+        getAllPosts(lastId)
+        .then(data=>{
+            setPosts([...posts,...data]);
+            setLoading(false);
+            setLastId(data.slice(-1)[0]._id)
+        })
+    }
     const loadMorePosts=()=>{
         getAllPosts(lastId)
         .then(data=>{
@@ -46,7 +56,7 @@ function PostsProvider({children}){
             posts,setPosts,
             extraPostsAvailable,setExtraPostsAvailable,
             loading,setLoading,
-            loadMorePosts
+            loadMorePosts,refreshPosts
         }}>
             {children}
         </PostsContext.Provider>

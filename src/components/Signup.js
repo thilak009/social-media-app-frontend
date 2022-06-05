@@ -28,7 +28,7 @@ function Signup() {
         if(password !== confirmPassword){
             alert(`password does not match`)
         }
-        if(username && email && password === confirmPassword){
+        if( email && password === confirmPassword){
             setLoading(true)
             signup({username,email,password})
             .then(data=>{
@@ -71,11 +71,11 @@ function Signup() {
                     <Row sidePadding="large">
                         <Portion>
                             <FormWrapper>
-                                <InputField
+                                {/* <InputField
                                     label="Username"
                                     placeholder="username"
                                     onChange={handleChange("username")}
-                                />
+                                /> */}
                                 <InputField
                                     label="Email"
                                     placeholder="email"
@@ -91,7 +91,7 @@ function Signup() {
                                     label="Confirm Password"
                                     type="password"
                                     placeholder="confirm password"
-                                    onChange={handleChange("confirmpassword")}
+                                    onChange={handleChange("confirmPassword")}
                                 />
                                 <Button
                                     kind="secondary"

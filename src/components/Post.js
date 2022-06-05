@@ -4,12 +4,13 @@ import moment from 'moment';
 import { createComment, deletePost } from '../user';
 import { isAuthenticated } from '../auth';
 import {BiUpvote, BiDownvote} from 'react-icons/bi';
-import {AiOutlineClose} from 'react-icons/ai'
+// import {AiOutlineClose} from 'react-icons/ai'
 import { Link } from 'react-router-dom';
 import { upVote, removeUpVote, downVote, removeDownVote, getVoteDetails } from '../user/profile';
 import {useHistory} from 'react-router-dom';
 import {ConfirmDialog} from './Dialog';
 import { Button, Card, Element, HRule, Portion, Row, TextArea } from 'fictoan-react';
+import { useQueryClient } from 'react-query';
 
 function CommentModal({post,shown,close}){
 
@@ -132,12 +133,14 @@ function CommentModal({post,shown,close}){
 
 function Post({post}) {
 
+    const queryClient = useQueryClient()
+
     const history = useHistory()
     const {user} = isAuthenticated()
     const {_id,title,description,postedBy,createdAt}=post
 
     const postRef = useRef()
-
+    
     const [modalShown,toggleModalShown] = useState(false)
     const [postModal,togglePostModal] = useState(false)
     const [voteDetails,setVoteDetails] = useState({})
@@ -172,6 +175,7 @@ function Post({post}) {
         }
         deletePost(postInfo)
         .then(data=>{
+            queryClient.invalidateQueries(["posts",user._id])
             postRef.current.style.display = 'none';
         })
         .catch(err=>console.log(err))
@@ -256,7 +260,7 @@ function Post({post}) {
                         <Link to={`/${user._id}/post/${_id}`}>
                             <div className={`post-info ${description.length > 1000?"post-info-in-modal":""}`}
                                 style={{cursor:"pointer"}}>
-                                <h3 className="post-title">{title}</h3>
+                                <h5 className="post-title">{title}</h5>
                                 <p>{description}</p>
                             </div>
                         </Link>
@@ -278,6 +282,7 @@ function Post({post}) {
                                         borderColour="red-90"
                                         textColour="red"
                                         size="small"
+                                        shape='rounded'
                                         onClick={()=> [toggleDialog(!dialog),history.push("#delete")]}
                                     >
                                         Delete

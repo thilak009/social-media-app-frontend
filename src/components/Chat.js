@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useHistory, useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { isAuthenticated } from '../auth'
 import { checkChatRoom, getAllMessages, sendMessage } from '../user/chat'
 import {IoArrowBackSharp} from 'react-icons/io5';
 import '../CSS/chat.css'
 import io from 'socket.io-client'
+import { Button, Element, FormItem, FormWrapper, InputField, Portion, Row } from 'fictoan-react';
 
 
 var socket;
@@ -73,7 +74,8 @@ function Chat() {
         socket.emit('new message',messageData)
         sendMessage(chatRoom._id,message)
         .then(data=>{
-            document.getElementById('msg-input').value=""
+            // document.getElementById('msg-input').value=""
+            setMessage("")
         })
         
     }
@@ -101,15 +103,50 @@ function Chat() {
                     }
                 </ul>
             )
-        
     }
     return (
-        <div className="chat-page">
-            <div className="chat-center">
+        <>
+        {/* <div className="chat-page"> */}
+            <Row sidePadding="huge" style={{height:"90vh"}}>
+                <Portion>
+                    <div>
+                        <span onClick={()=> history.goBack()} style={{cursor:"pointer"}}>
+                            <IoArrowBackSharp className='is-clickable' style={{fontSize:"25px",color:"#fd6868"}}/>
+                        </span>
+                    </div>
+                    <p id="is-typing"></p>
+                    {!loading && messagesList()}
+                    <FormWrapper>
+                        <Element as="div" className="vertically-center-items">
+                        <FormItem marginBottom='none'>
+                            <InputField
+                                placeholder="Message" onChange={handleChange}
+                                value={message}
+                            />
+                        </FormItem>
+                        <FormItem>
+                            <Button
+                                kind='secondary'
+                                onClick={uploadMessage}
+                            >
+                                Send
+                            </Button>
+                        </FormItem>
+                        </Element>
+                    </FormWrapper>
+                    {/* <div style={{width:"100%",display:"flex"}}>
+                        <form id="msg-form">
+                            <input id="msg-input" type="text" placeholder="Message" onChange={handleChange}></input>
+                            <button onClick={uploadMessage}>Send</button>
+                        </form>
+                    </div> */}
+                </Portion>
+            </Row>
+            {/* <div className="chat-center">
                 <div className="back-btn">
-                <span onClick={()=> history.goBack()} style={{cursor:"pointer"}}>
-                    <IoArrowBackSharp style={{fontSize:"25px",color:"#fd6868"}}/>
-                </span>
+                    <span onClick={()=> history.goBack()} style={{cursor:"pointer"}}>
+                        <IoArrowBackSharp className='is-clickable' style={{fontSize:"25px",color:"#fd6868"}}/>
+                    </span>
                 </div>
                 <p id="is-typing"></p>
                 {!loading && messagesList()}
@@ -119,8 +156,9 @@ function Chat() {
                         <button onClick={uploadMessage}>Send</button>
                     </form>
                 </div>
-            </div>
-        </div>
+            </div> */}
+        {/* </div> */}
+        </>
     )
 }
 

@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import { isAuthenticated } from '../auth';
-import {GoHome} from 'react-icons/go';
-import {IoCreateOutline} from 'react-icons/io5';
-import {RiLogoutBoxLine} from 'react-icons/ri';
-import {BsPerson,BsSearch} from 'react-icons/bs'
+// import {GoHome} from 'react-icons/go';
+// import {IoCreateOutline} from 'react-icons/io5';
+// import {RiLogoutBoxLine} from 'react-icons/ri';
+// import {BsPerson,BsSearch} from 'react-icons/bs'
+import {ReactComponent as HomeIcon} from "../assets/home.svg"
+import {ReactComponent as CreateIcon} from "../assets/edit.svg"
+import {ReactComponent as ProfileIcon} from "../assets/user.svg"
+import {ReactComponent as LogoutIcon} from "../assets/logout.svg"
+
 import '../CSS/navbar.css'
 import {ConfirmDialog} from './Dialog';
  
@@ -43,16 +48,16 @@ function Navbar({toggle}) {
                 <div className="navbar">
                     <ul>
                         <li className="nav-item">
-                            <Link className="nav-item" to="/"><GoHome/><span className="icon-info">Home</span></Link>
+                            <Link className="nav-item" to="/"><HomeIcon/><span className="icon-info">Home</span></Link>
                         </li>
                         <li className="nav-item">
                             <p style={{cursor: 'pointer'}} onClick={()=>[toggle(true),history.push("#create")]}
                             className="nav-item">
-                                <IoCreateOutline/><span className="icon-info">Create</span>
+                                <CreateIcon/><span className="icon-info">Create</span>
                             </p>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-item" to={`/profile/${user?user._id:""}`}><BsPerson/><span className="icon-info">Profile</span></Link>
+                            <Link className="nav-item" to={`/profile/${user?user._id:""}`}><ProfileIcon/><span className="icon-info">Profile</span></Link>
                         </li>
                         {/* <li className="nav-item">
                             <Link className="nav-item" to="/search"><BsSearch/><span className="icon-info">Search</span></Link>
@@ -62,7 +67,7 @@ function Navbar({toggle}) {
                             <li className="nav-item">
                                 <span style={{cursor:'pointer'}} onClick={()=>[toggleDialog(!dialog),history.push("#logout")]}
                                 className="nav-item">
-                                    <RiLogoutBoxLine/><span className="icon-info">Logout</span>
+                                    <LogoutIcon/><span className="icon-info">Logout</span>
                                 </span>
                             </li>
                         )}

@@ -3,14 +3,14 @@ import { getUserPosts, getUserProfile } from '../user';
 import Post from './Post';
 import moment from 'moment';
 import { Link,useHistory,useParams } from 'react-router-dom';
-import { checkFollow, editProfile, removeFollow, setFollow,updateProfilePhoto, getImagesFromCatalog} from '../user/profile';
-import {AiOutlineEdit} from 'react-icons/ai';
+import { checkFollow, editProfile, removeFollow, setFollow,updateProfilePhoto, getImagesFromCatalog, uploadAndRegisterUsers, updatePassword} from '../user/profile';
 import {IoArrowBackSharp} from 'react-icons/io5';
-import {AiOutlineMessage} from 'react-icons/ai'
 import { isAuthenticated } from '../auth';
 import '../CSS/profile.css';
 import {loadingAnimation, loadingScreen} from './LoadingScreen';
-import { Button, Card, Element, FormWrapper, InputField, Portion, Row } from 'fictoan-react';
+import { Button, Card, Element, FormWrapper, Heading, InputField, Portion, Row, Text } from 'fictoan-react';
+import {ReactComponent as EditIcon} from "../assets/edit.svg"
+import { useQuery } from 'react-query';
 
 
 function UserProfile() {
@@ -18,6 +18,21 @@ function UserProfile() {
     const {user} = isAuthenticated()
     const {userId} = useParams()
     const history = useHistory()
+
+    const {data,isFetching,isError} =useQuery(["posts",user._id], async()=>{
+        const {user,token} = isAuthenticated()
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}/user/${user._id}/profile/${userId}/posts`,{
+            method:"GET",
+            headers:{
+                "auth-token": token,
+                "Content-Type": "application/json",
+            }
+        })
+        if(!response.ok){
+            throw new Error("Network response was not ok")
+        }
+        return response.json()
+    })
 
     const [posts,setPosts] = useState([]);
     const [userProfile,setUserProfile] = useState({});
@@ -36,6 +51,14 @@ function UserProfile() {
     const [loading,setLoading] = useState(false)
     const [picsLoading,setPicsLoading] = useState(false)
     const {formData} = values;
+
+    const [addUsersFormIsOpen,setAddUsersFormIsOpen] = useState(false)
+    const [registerUsersFile,setRegisterUsersFile] = useState(undefined)
+    const [registerUsersError,setRegisterUsersError] = useState([])
+
+    const [updatePasswordIsOpen,setUpdatePasswordIsOpen] = useState(false)
+    const [currentPassword,setCurrentPassword] = useState("")
+    const [newPassword,setNewPassword] = useState("")
 
     const setForm=()=>{
         setValues({...values, formData: new FormData()});
@@ -148,6 +171,35 @@ function UserProfile() {
             return image;
         })
     }
+    const registerUsers=(e)=>{
+        e.preventDefault();
+        const formdata = new FormData()
+        formdata.append("file",registerUsersFile,registerUsersFile.name)
+        uploadAndRegisterUsers(formdata).then(res=>{
+            if(res?.failure?.length>0){
+                setRegisterUsersError(res.failure)
+            }
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
+    const updatePasswordForUser=(e)=>{
+        e.preventDefault();
+        updatePassword({currentPassword,newPassword}).then(res=>{
+            if(res.error){
+                alert(res.error)
+            }
+            else{
+                alert("password changed")
+                setUpdatePasswordIsOpen(false)
+                setCurrentPassword("")
+                setNewPassword("")
+            }
+        }).catch(err=>{
+            console.log(err);
+        })
+    }
     //HTML return functions to make code more readable
 
     const userInfo=()=>{
@@ -157,41 +209,62 @@ function UserProfile() {
                 <img src={`${process.env.REACT_APP_BASE_URL}/user/profile/${userId}/photo`} alt="profile"/>
                 <div className="user-details">
                     <div className="user-main">
+                        <Element as="div" className='vertically-center-items'>
+                            <Heading as="h3" marginRight='nano'>{userProfile.fullname}</Heading>
+                            {
+                                (userId === user._id) && <EditIcon className='is-clickable' onClick={showProfileEditForm} />
+                                    // style={{fontSize:"20px",cursor:"pointer",marginLeft:"5px"}}/>
+                            }
+                        </Element>
                         <div>
-                            <h3>{userProfile.fullname}</h3>
-                        </div>
-                        <div>
-                        {
-                            (userId === user._id) && <AiOutlineEdit onClick={showProfileEditForm} 
-                                style={{fontSize:"20px",cursor:"pointer",marginLeft:"5px"}}/>
-                        }
                         {
                             (userId !== user._id) && (
                                 <div style={{marginLeft:"5px",display:'flex',gap:"10px"}}>
                                     <div>
                                     {
-                                        followData.follow ? <button onClick={removeAsFollower}>Unfollow</button> :<button onClick={setAsFollower}>Follow</button>
+                                        followData.follow ? <Button bgColour='red-20' borderColour='red-90' textColour='red-90' size='small' onClick={removeAsFollower}>Unfollow</Button>:<Button kind='secondary' size='small' onClick={setAsFollower}>Follow</Button>
                                     }
                                     </div>
                                     <div>
-                                    <Link to={`/${userId}/chat`}><AiOutlineMessage style={{fontSize:"22px",color:"#fd4d4d",height:"25px"}}/></Link>
+                                    <Link to={`/${userId}/chat`}>
+                                        {/* <AiOutlineMessage style={{fontSize:"22px",color:"red",height:"25px"}}/> */}
+                                        <Button
+                                            kind='primary'
+                                            size="small"
+                                        >
+                                            Message
+                                        </Button>
+                                    </Link>
                                     </div>
                                 </div>
                             )
                         }
                         </div>
                     </div>
-                    <div>
+                    {/* <div>
                         <p>@{userProfile.username}</p>
                     </div>
                     <div style={{display:"flex"}}>
                         <p>{followData.followers} Followers</p>
                         <p style={{marginLeft:"4px"}}>{followData.following} Following</p>
-                    </div>
+                    </div> */}
                     <div> 
                         <p>{userProfile.bio}</p>
                         <p>Joined on : {moment(userProfile.date).format('MMMM YYYY')}</p>
                     </div>
+                    {
+                        userProfile.role==="Admin" && (
+                            <Element as="div" marginTop='nano'>
+                                <Button
+                                    kind='primary'
+                                    size='small'
+                                    onClick={()=> setAddUsersFormIsOpen(true)}
+                                >
+                                    Add users
+                                </Button>
+                            </Element>
+                        )
+                    }
                 </div>
                 
             </div>
@@ -224,9 +297,9 @@ function UserProfile() {
                         padding="micro"
                         marginBottom="micro"
                     >
-                        <FormWrapper>
+                        <FormWrapper marginBottom='micro'>
                             <InputField
-                                label="Fullname"
+                                label="Name"
                                 onChange={handleChange("fullname")}
                                 defaultValue={userProfile.fullname}
                             />
@@ -261,6 +334,49 @@ function UserProfile() {
                                 }
                             </div>
                             <button onClick={updateImage} style={{margin:"5px 0px 8px 0px"}}>Save Image</button> */}
+                        </FormWrapper>
+                        {
+                            !updatePasswordIsOpen &&(
+                                <Button
+                                    kind='primary'
+                                    size='small'
+                                    onClick={()=> setUpdatePasswordIsOpen(true)}
+                                >
+                                    Change Password ?
+                                </Button>
+                            )
+                        }
+                        <FormWrapper onSubmit={updatePasswordForUser}>
+                            {
+                                updatePasswordIsOpen && (
+                                    <>
+                                        <InputField
+                                            label='Current password'
+                                            onChange={(e)=> setCurrentPassword(e.currentTarget.value)}
+                                        />
+                                        <InputField
+                                            label='New password'
+                                            onChange={(e)=> setNewPassword(e.currentTarget.value)}
+                                        />
+                                        <Element as="div" marginTop="nano">
+                                            <Button kind="primary" size="small"
+                                                disabled={!currentPassword || !newPassword}
+                                            >
+                                                Update user
+                                            </Button>
+                                            <Button
+                                                kind="secondary"
+                                                size="small"
+                                                marginLeft='micro'
+                                                type='button'
+                                                onClick={()=> setUpdatePasswordIsOpen(false)}
+                                            >
+                                                Cancel
+                                            </Button>
+                                        </Element>
+                                    </>
+                                )
+                            }
                         </FormWrapper>
                     </Card>
                     {/* <form className="image-update-form">
@@ -302,7 +418,7 @@ function UserProfile() {
             <div className="posts">
                 <div className="posts-container">
                 {
-                    posts.map((post)=>{
+                    data && data.map((post)=>{
                         return(
                             <Post key={post._id} post={post}/>
                         )
@@ -312,7 +428,59 @@ function UserProfile() {
             </div>
         )
     }
-
+    const addUsersForm=()=>{
+        if(addUsersFormIsOpen){
+            return(
+                <Element as="div">
+                    <Card
+                        shape="rounded"
+                        padding="micro"
+                        marginBottom="micro"
+                    >
+                        <FormWrapper onSubmit={registerUsers}>
+                            <InputField
+                                type='file'
+                                label='Upload a xlsx sheet'
+                                accept='.xlsx'
+                                onChange={(e)=> e.currentTarget.files?setRegisterUsersFile(e.currentTarget.files[0]):setRegisterUsersFile(undefined)}
+                            />
+                            <Element as="div" className='vertically-center-items'>
+                                <Button
+                                    kind='primary'
+                                    size='small'
+                                    type='submit'
+                                    disabled={!registerUsersFile}
+                                >
+                                    Create users
+                                </Button>
+                                <Button
+                                    kind='secondary'
+                                    size='small'
+                                    type='button'
+                                    marginLeft='micro'
+                                    onClick={()=> {
+                                        setAddUsersFormIsOpen(false)
+                                        setRegisterUsersError([])
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                            </Element>
+                        </FormWrapper>
+                        <Element as="div">
+                            {
+                                registerUsersError.length>0 && (
+                                    registerUsersError.map((error,index)=>{
+                                        return <Text key={index} textColour="red-80">{error}</Text>
+                                    })
+                                )
+                            }
+                        </Element>
+                    </Card>
+                </Element>
+            )
+        }
+    }
     return (
         <>
             <Row sidePadding="huge">
@@ -323,7 +491,7 @@ function UserProfile() {
                         </span>
                     </div>
                     {
-                        loading ? loadingScreen():[userInfo(),userUpdateForm(),userPosts()]
+                        loading ? loadingScreen():[userInfo(),addUsersForm(),userUpdateForm(),userPosts()]
                     }
                 </Portion>
             </Row>

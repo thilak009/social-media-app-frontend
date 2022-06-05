@@ -14,7 +14,7 @@ export const getAllPosts=(lastId)=>{
     .then(res=>{
         return res.json()
     })
-    .catch(err=>console.log(err))
+    .catch(err=>{console.log(err)})
 }
 
 export const getUserProfile=(userId)=>{
@@ -69,7 +69,7 @@ export const getPost=(postId)=>{
 export const createPost=(post)=>{
 
     const {user , token} = isAuthenticated()
-    const {title,description}=post
+    const {title,description,tag}=post
     
     return fetch(`${process.env.REACT_APP_BASE_URL}/user/${user._id}/create-post/`,{
         method: "POST",
@@ -79,7 +79,8 @@ export const createPost=(post)=>{
         },
         body: JSON.stringify({
             title,
-            description
+            description,
+            tag
         })
     })
     .then(res=>{

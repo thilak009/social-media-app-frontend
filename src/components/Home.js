@@ -3,32 +3,35 @@ import { createPost } from '../user';
 import Navbar from './Navbar';
 import Post from './Post';
 import '../CSS/home.css';
-import {loadingScreen} from './LoadingScreen';
+// import {loadingScreen} from './LoadingScreen';
 import { useHistory } from 'react-router';
 import { PostsContext } from '../context';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Button, Card, FormWrapper, Heading, InputField, Portion, Row, TextArea } from 'fictoan-react';
+import { Button, Card, FormWrapper, Heading, InputField, Portion, Row, Select, TextArea } from 'fictoan-react';
+import { useQuery, useQueryClient } from 'react-query';
+import { isAuthenticated } from '../auth';
 
 
-function Modal({ shown, close }) {
+function Modal({ shown, close,refetchPosts }) {
     
     const history = useHistory()
     const [postValues,setPostValues] = useState({
         title:"",
-        description:""
+        description:"",
+        tag: ""
     })
-    
+    const queryClient = useQueryClient()
     const handleChange = name => event =>{
         setPostValues({...postValues, [name]: event.target.value})
     }
     const onSubmit=(e)=>{
         
         e.preventDefault()
-        const {title,description} = postValues
+        const {title,description,tag} = postValues
 
-        if(title && description){
-            createPost({title,description})
+        if(title && description && tag){
+            createPost({title,description,tag})
             .then(data=>{
                
                toast.info('Post created', {
@@ -40,6 +43,8 @@ function Modal({ shown, close }) {
                 draggable: false,
                 progress: undefined,
                 });
+                // refetchPosts()
+                queryClient.invalidateQueries("posts")
             })
             close()
             history.goBack()
@@ -83,9 +88,29 @@ function Modal({ shown, close }) {
                         placeholder="Elaborate on the question"
                         onChange={handleChange("description")}
                     />
+                    <Select
+                        label='Select visibility type'
+                        options={[
+                            {
+                                name: "All",
+                                value: "All"
+                            },
+                            {
+                                name: "Students",
+                                value: "Students"
+                            },
+                            {
+                                name: "Faculty",
+                                value: "Faculty"
+                            }
+                        ]}
+                        onChange={handleChange("tag")}
+                    />
+
                     <Button
                         kind="primary"
                         type="submit" onClick={onSubmit}
+                        disabled={!postValues.description||!postValues.tag||!postValues.title}
                     >
                         Post
                     </Button>
@@ -100,11 +125,28 @@ function Modal({ shown, close }) {
 }
 
 function Home() {
-
+    
     const history= useHistory()
-    const {posts,loading,extraPostsAvailable,loadMorePosts} = useContext(PostsContext)
+    const {posts,loading,extraPostsAvailable,loadMorePosts,refreshPosts} = useContext(PostsContext)
     const [modalShown, toggleModal] = useState(false)
     const [acknowledgeMessage,toggleAcknowledgeMessage] = useState(false)
+    
+
+    const {data,isError,isFetching} = useQuery("posts",async()=>{
+        const {user,token} = isAuthenticated()
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}/user/${user._id}/`,{
+            method:"GET",
+            headers:{
+                "auth-token": token,
+                "Content-Type": "application/json",
+                "lastId": ""
+            }
+        })
+        if(!response.ok){
+            throw new Error("Network response was not ok")
+        }
+        return response.json()
+    })
 
     useEffect(()=>{
         var feed = document.getElementById("feed-scroll")
@@ -131,7 +173,7 @@ function Home() {
                             {/* <div className="posts"> */}
                                 {/* <div className="posts-container"> */}
                                 {
-                                    posts.map((post)=>{
+                                    data && data.map((post)=>{
                                         return(
                                             <Post key={post._id} post={post}/>
                                         )
@@ -161,6 +203,7 @@ function Home() {
                                 close={() => {
                                 toggleModal(false);
                                 }}
+                                refetchPosts={refreshPosts}
                             >
                             </Modal>
                             <ToastContainer

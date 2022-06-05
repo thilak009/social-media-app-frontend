@@ -33,11 +33,13 @@
 }
 .left{
     align-self: flex-start;
-    background-color: var(--color-primary-600);
+    /* background-color: var(--color-primary-600); */
+    background-color: #b8bfc7;
 }
 .right{
     align-self: flex-end;
-    background-color: var(--color-primary-700);
+    /* background-color: var(--color-primary-700); */
+    background-color: #b9eefe;
 }
 ::-webkit-scrollbar{
   width: 5px;

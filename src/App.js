@@ -3,14 +3,14 @@ import Signin from './components/Signin';
 import {BrowserRouter as Router,Route,Switch} from 'react-router-dom'
 import PrivateRoute from './auth/PrivateRoute';
 import Home from './components/Home';
-import Signup from './components/Signup';
+// import Signup from './components/Signup';
 import UserProfile from './components/UserProfile';
 import PageNotFound from './components/PageNotFound';
 import Chat from './components/Chat';
 import Comments from './components/Comments';
 import UserCheckRoute from './auth/UserCheckRoute';
 import { PostsProvider } from './context';
-import Search from './components/Search';
+// import Search from './components/Search';
 import { SetuLightTheme } from './Light.theme';
 import { ThemeProvider } from 'fictoan-react';
 import { GlobalLightStyles } from './Global.light.styled';
@@ -25,7 +25,7 @@ function App() {
           <Router>
             <Switch>
               <UserCheckRoute exact path='/signin' component={Signin}></UserCheckRoute>
-              <UserCheckRoute exact path='/signup' component={Signup}></UserCheckRoute>
+              {/* <UserCheckRoute exact path='/signup' component={Signup}></UserCheckRoute> */}
               <PostsProvider>
                 <Switch>
                   <PrivateRoute exact path='/' component={Home}></PrivateRoute>

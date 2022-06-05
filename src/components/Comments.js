@@ -5,7 +5,7 @@ import { loadingAnimation } from './LoadingScreen'
 import {IoArrowBackSharp} from 'react-icons/io5';
 import moment from 'moment'
 import { Link, useHistory, useParams } from 'react-router-dom'
-import { Button, Element, Portion, Row, TextArea } from 'fictoan-react';
+import { Button, Element, HRule, Portion, Row, TextArea } from 'fictoan-react';
 
 
 function Comments() {
@@ -102,15 +102,17 @@ function Comments() {
                                 }
                                 <div>
                                     <h4>{post.postedBy.fullname}</h4>
-                                    <p style={{color:"grey"}}>@{post.postedBy.username}</p>
+                                    {/* <p style={{color:"grey"}}>@{post.postedBy.username}</p> */}
                                 </div>
                             </div>
                             <h6>{moment(post.createdAt).format('MMMM Do YYYY, H:mm')}</h6>
                         </div>
+                        <HRule kind="primary" marginTop="nano" marginBottom="none"/>
                         <div className="post-info post-info-in-modal">
                             <h3 className="post-title">{post.title}</h3>
                             <p>{post.description}</p>
                         </div>
+                        <HRule kind="primary" marginTop="nano" marginBottom="nano"/>
                         
                         <form>
                             <Element as="div" className='vertically-center-items push-to-ends' marginTop='nano' marginBottom='micro'>
@@ -136,14 +138,14 @@ function Comments() {
                                     comments.map((comment)=>{
                                         return(
                                             <div key={comment._id}>
-                                                <Element as="section">
+                                                <Element as="section" marginBottom='nano'>
                                                     <div style={{display:"flex",gap:"3px"}}>
                                                         <Link to={`/profile/${comment.userId._id}`}>      
                                                             <img src={`${process.env.REACT_APP_BASE_URL}/user/profile/${comment.userId._id}/photo`} className="comment-profile-pic"/>
                                                         </Link>
                                                         <div>
                                                             <p style={{fontSize:"15px"}}>{comment.userId.fullname}</p>
-                                                            <p style={{fontSize:"13px",color:"grey"}}>@{comment.userId.username}</p>
+                                                            {/* <p style={{fontSize:"13px",color:"grey"}}>@{comment.userId.username}</p> */}
                                                         </div>
                                                     </div>
                                                     <div style={{padding:"0px 5px 0px 5px"}}>

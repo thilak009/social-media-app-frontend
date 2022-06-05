@@ -38,6 +38,10 @@ li{
 textarea{
   resize: none;
 }
+iframe {
+  pointer-events: none;
+  display: none;
+}
 /* input:focus{
   outline: 1px solid var(--color-primary-300);
 } */
