@@ -19,7 +19,7 @@ function Modal({ shown, close,refetchPosts }) {
     const [postValues,setPostValues] = useState({
         title:"",
         description:"",
-        tag: ""
+        tag: "All"
     })
     const queryClient = useQueryClient()
     const handleChange = name => event =>{
@@ -44,6 +44,7 @@ function Modal({ shown, close,refetchPosts }) {
                 progress: undefined,
                 });
                 // refetchPosts()
+                setPostValues({...postValues,title:"",description:"",tag:"All"})
                 queryClient.invalidateQueries("posts")
             })
             close()
