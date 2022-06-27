@@ -14,6 +14,7 @@ import { PostsProvider } from './context';
 import { SetuLightTheme } from './Light.theme';
 import { ThemeProvider } from 'fictoan-react';
 import { GlobalLightStyles } from './Global.light.styled';
+import ChatInbox from './components/ChatInbox';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
                   <PrivateRoute exact path='/' component={Home}></PrivateRoute>
                   <PrivateRoute exact path="/profile/:userId" component={UserProfile}></PrivateRoute>
                   <PrivateRoute exact path="/:userId/chat" component={Chat}></PrivateRoute>
+                  <PrivateRoute exact path="/:userId/inbox" component={ChatInbox}></PrivateRoute>
                   <PrivateRoute exact path='/:userId/post/:postId' component={Comments}></PrivateRoute>
                   {/* <PrivateRoute exact path="/search" component={Search}></PrivateRoute> */}
                   <Route path="*" component={PageNotFound}></Route>

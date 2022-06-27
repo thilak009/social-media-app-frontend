@@ -188,8 +188,8 @@ export const removeDownVote=(postId)=>{
 }
 
 export const uploadAndRegisterUsers=(formData)=>{
-    const {token} = isAuthenticated();
-    return fetch(`${process.env.REACT_APP_BASE_URL}/user/upload`,{
+    const {token,user} = isAuthenticated();
+    return fetch(`${process.env.REACT_APP_BASE_URL}/user/${user._id}/upload`,{
         method:"POST",
         headers:{
             "auth-token": token,
@@ -222,3 +222,19 @@ export const updatePassword=(data)=>{
     })
     .catch(err=>console.log(err))
 }
+
+export const getChatInbox=()=>{
+    const {user,token} = isAuthenticated();
+    return fetch(`${process.env.REACT_APP_BASE_URL}/user/chat/${user._id}/inbox`,{
+        method:"POST",
+        headers:{
+            "auth-token": token,
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response=>{
+        return response.json()
+    })
+    .catch(err=>console.log(err))
+}
+

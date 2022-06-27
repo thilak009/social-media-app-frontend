@@ -222,7 +222,7 @@ function UserProfile() {
                                 <div style={{marginLeft:"5px",display:'flex',gap:"10px"}}>
                                     <div>
                                     {
-                                        followData.follow ? <Button bgColour='red-20' borderColour='red-90' textColour='red-90' size='small' onClick={removeAsFollower}>Unfollow</Button>:<Button kind='secondary' size='small' onClick={setAsFollower}>Follow</Button>
+                                        // followData.follow ? <Button bgColour='red-20' borderColour='red-90' textColour='red-90' size='small' onClick={removeAsFollower}>Unfollow</Button>:<Button kind='secondary' size='small' onClick={setAsFollower}>Follow</Button>
                                     }
                                     </div>
                                     <div>
@@ -241,13 +241,6 @@ function UserProfile() {
                         }
                         </div>
                     </div>
-                    {/* <div>
-                        <p>@{userProfile.username}</p>
-                    </div>
-                    <div style={{display:"flex"}}>
-                        <p>{followData.followers} Followers</p>
-                        <p style={{marginLeft:"4px"}}>{followData.following} Following</p>
-                    </div> */}
                     <div> 
                         <p>{userProfile.bio}</p>
                         <p>Joined on : {moment(userProfile.date).format('MMMM YYYY')}</p>
@@ -327,13 +320,6 @@ function UserProfile() {
                                     Cancel
                                 </Button>
                             </Element>
-                            {/* <div className="profile-pics-container">
-                                <p>Or choose from our amazing Catalog:</p><br/>
-                                {
-                                    picsLoading?loadingAnimation():profilePicsListToChoose()
-                                }
-                            </div>
-                            <button onClick={updateImage} style={{margin:"5px 0px 8px 0px"}}>Save Image</button> */}
                         </FormWrapper>
                         {
                             !updatePasswordIsOpen &&(
@@ -379,36 +365,6 @@ function UserProfile() {
                             }
                         </FormWrapper>
                     </Card>
-                    {/* <form className="image-update-form">
-                        <div>
-                            <label>Fullname :  </label><br/>
-                            <input type="text" onChange={handleChange("fullname")} placeholder="Fullname" defaultValue={userProfile.fullname}
-                             style={{width:"100%"}}/>
-                        </div>
-                        <div>
-                            <label>Bio : </label><br/>
-                            <textarea type="text" onChange={handleChange("bio")} placeholder="Bio" defaultValue={userProfile.bio}
-                            style={{minHeight:"100px",width:"100%"}}/>
-                        </div>
-                        <p>Choose Image from your Device:</p><br/>
-                        <input
-                        onChange={handleChange("photo")}
-                        type="file"
-                        name="photo"
-                        accept="image"
-                        placeholder="choose a file"
-                        />
-                        <button type="submit" onClick={onSubmit}>
-                            update user
-                        </button>
-                    </form>
-                    <div className="profile-pics-container">
-                        <p>Or choose from our amazing Catalog:</p><br/>
-                        {
-                            picsLoading?loadingAnimation():profilePicsListToChoose()
-                        }
-                    </div>
-                    <button onClick={updateImage} style={{margin:"5px 0px 8px 0px"}}>Save Image</button> */}
                 </div>
             )
         }
@@ -495,18 +451,6 @@ function UserProfile() {
                     }
                 </Portion>
             </Row>
-            {/* <div className="user-profile-page">
-                <div className="user-profile-center">
-                    <div className="back-button-container">
-                            <span style={{fontSize:"25px",cursor:"pointer",color:"#fd6868"}} onClick={()=>history.goBack()}>
-                                <IoArrowBackSharp/>
-                            </span>
-                    </div>
-                    {
-                        loading ? loadingScreen():[userInfo(),userUpdateForm(),userPosts()]
-                    }
-                </div>
-            </div> */}
         </>
     )
 }

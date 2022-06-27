@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import { isAuthenticated } from '../auth';
-// import {GoHome} from 'react-icons/go';
-// import {IoCreateOutline} from 'react-icons/io5';
-// import {RiLogoutBoxLine} from 'react-icons/ri';
-// import {BsPerson,BsSearch} from 'react-icons/bs'
+import {GoHome} from 'react-icons/go';
+import {IoCreateOutline} from 'react-icons/io5';
+import {RiLogoutBoxLine} from 'react-icons/ri';
+import {BsPerson,BsSearch} from 'react-icons/bs'
+import {BsChatDots,BsChatRightText} from 'react-icons/bs'
 import {ReactComponent as HomeIcon} from "../assets/home.svg"
 import {ReactComponent as CreateIcon} from "../assets/edit.svg"
 import {ReactComponent as ProfileIcon} from "../assets/user.svg"
@@ -54,7 +55,8 @@ function Navbar({toggle}) {
                             <Link className="nav-item" to="/"
                                 onClick={()=> queryClient.invalidateQueries("posts")}
                             >
-                                <HomeIcon/><span className="icon-info">Home</span>
+                                <HomeIcon/>
+                                <span className="icon-info">Home</span>
                             </Link>
                         </li>
                         <li className="nav-item">
@@ -62,6 +64,15 @@ function Navbar({toggle}) {
                             className="nav-item">
                                 <CreateIcon/><span className="icon-info">Create</span>
                             </p>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-item" to={`${user?user._id:""}/inbox`}
+                                onClick={()=> queryClient.invalidateQueries("posts")}
+                            >
+                                {/* <HomeIcon/> */}
+                                <BsChatRightText/>
+                                <span className="icon-info">Chat</span>
+                            </Link>
                         </li>
                         <li className="nav-item">
                             <Link className="nav-item" to={`/profile/${user?user._id:""}`}><ProfileIcon/><span className="icon-info">Profile</span></Link>
